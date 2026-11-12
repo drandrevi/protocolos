@@ -845,7 +845,7 @@ async function makePdf(p){
   btn.disabled = true; note.textContent = "Montando o PDF…";
   const stage = document.getElementById("pdf-stage");
   stage.innerHTML = pdfHtml(p);
-  const filename = `Hormones - ${p.nome}.pdf`;
+  const filename = ("Hormones-" + p.nome).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/-+$/, "") + ".pdf";
   try {
     if (document.fonts && document.fonts.ready) await document.fonts.ready;
     const worker = html2pdf().set({
