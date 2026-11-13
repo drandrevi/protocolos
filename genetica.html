@@ -1,0 +1,1290 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Teste Genético · Hormones</title>
+<meta name="description" content="Leitor de teste genético da Hormones Mentoring Elite: lê o laudo, marca as predisposições e indica os protocolos Hormones conforme a sua clínica.">
+<meta name="theme-color" content="#0b3b25">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:title" content="Teste Genético · Hormones">
+<meta property="og:description" content="Do laudo genético à indicação de protocolos Hormones, adaptada à sua clínica.">
+<meta property="og:image" content="https://hormones-protocolos.vercel.app/og.jpg">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* Duas telas: 1) triagem (o que o paciente sente: corpo interativo, queixas, texto livre); 2) protocolos indicados à esquerda e painel do protocolo ao lado. Visual em vidro sobre fundo verde profundo; modo claro com vidro fosco. */
+:root{
+  --bg:#e8f1ec; --bg-glow1:rgba(31,174,107,.22); --bg-glow2:rgba(16,120,76,.16); --stripe:rgba(10,60,35,.035);
+  --glass:linear-gradient(150deg,rgba(255,255,255,.82),rgba(255,255,255,.52));
+  --glass-2:rgba(255,255,255,.6); --gline:rgba(12,70,42,.12); --ghi:rgba(255,255,255,.95);
+  --ink:#0c2217; --ink-2:#456152; --ink-3:#7b9587;
+  --acc:#0f9a5c; --acc-2:#13b26b; --acc-soft:rgba(19,178,107,.12); --acc-line:rgba(19,178,107,.35);
+  --shadow:0 18px 40px -26px rgba(8,50,30,.45);
+  --f-head:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Open Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#040b07; --bg-glow1:rgba(31,174,107,.20); --bg-glow2:rgba(14,107,68,.22); --stripe:rgba(255,255,255,.025);
+  --glass:linear-gradient(150deg,rgba(255,255,255,.085),rgba(255,255,255,.025));
+  --glass-2:rgba(255,255,255,.05); --gline:rgba(255,255,255,.11); --ghi:rgba(255,255,255,.16);
+  --ink:#eaf6ef; --ink-2:#a3bfaf; --ink-3:#6c8a7a;
+  --acc:#3ee08f; --acc-2:#2bc77b; --acc-soft:rgba(62,224,143,.10); --acc-line:rgba(62,224,143,.35);
+  --shadow:0 24px 50px -28px rgba(0,0,0,.9);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#040b07; --bg-glow1:rgba(31,174,107,.20); --bg-glow2:rgba(14,107,68,.22); --stripe:rgba(255,255,255,.025);
+  --glass:linear-gradient(150deg,rgba(255,255,255,.085),rgba(255,255,255,.025));
+  --glass-2:rgba(255,255,255,.05); --gline:rgba(255,255,255,.11); --ghi:rgba(255,255,255,.16);
+  --ink:#eaf6ef; --ink-2:#a3bfaf; --ink-3:#6c8a7a;
+  --acc:#3ee08f; --acc-2:#2bc77b; --acc-soft:rgba(62,224,143,.10); --acc-line:rgba(62,224,143,.35);
+  --shadow:0 24px 50px -28px rgba(0,0,0,.9);
+  color-scheme:dark}
+*{box-sizing:border-box;font-style:normal!important}
+html{background:var(--bg)}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(900px 600px at 85% -5%,var(--bg-glow1),transparent 65%),radial-gradient(800px 700px at -5% 45%,var(--bg-glow2),transparent 65%),radial-gradient(700px 500px at 60% 110%,var(--bg-glow1),transparent 65%),repeating-linear-gradient(90deg,transparent 0 78px,var(--stripe) 78px 80px)}
+h1,h2,h3,h4{font-family:var(--f-head);text-wrap:balance}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{max-width:1320px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.glass{background:var(--glass);border:1px solid var(--gline);border-radius:22px;box-shadow:inset 0 1px 0 var(--ghi),var(--shadow);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%)}
+.tile{display:grid;place-items:center;width:40px;height:40px;border-radius:13px;flex:none;color:#fff;background:linear-gradient(140deg,#0c6a42,#2fd086);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 18px -10px rgba(31,208,134,.8)}
+.tile .ic{width:20px;height:20px}
+.tile.sm{width:32px;height:32px;border-radius:10px}.tile.sm .ic{width:17px;height:17px}
+.eyebrow{font-family:var(--f-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+
+/* barra */
+.top{position:sticky;top:0;z-index:30;padding-top:env(safe-area-inset-top,0px);background:rgba(4,24,15,.9);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08);color:#fff}
+.top .wrap{display:flex;align-items:center;gap:14px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;flex:none}
+.brand img{height:44px;width:auto;display:block}
+.brand span{font-family:var(--f-head);font-weight:600;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#9fe9c3;border-left:1px solid rgba(255,255,255,.18);padding-left:14px;line-height:1.3}
+.steps{display:flex;gap:6px;margin-left:auto}
+.steps button{display:flex;align-items:center;gap:8px;padding:8px 13px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#cfe9db;font-family:var(--f-head);font-weight:600;font-size:12.5px;cursor:pointer}
+.steps button b{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.12);font-size:11px}
+.steps button[aria-current="true"]{background:linear-gradient(140deg,#0c6a42,#25b875);border-color:transparent;color:#fff}
+.mode{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;flex:none}
+.mode:hover{background:rgba(255,255,255,.14)}
+
+/* ===== tela 1: triagem ===== */
+.intake{padding-block:30px 60px}
+.intake-head{max-width:760px;margin-bottom:22px}
+.intake-head h1{margin:6px 0 6px;font-weight:800;font-size:clamp(26px,3.6vw,42px);line-height:1.08;letter-spacing:-.02em}
+.intake-head p{margin:0;color:var(--ink-2);font-size:16px}
+.ig{display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);gap:20px;align-items:start}
+.scan{position:relative;overflow:hidden;border-radius:26px;padding:18px;background:radial-gradient(120% 70% at 50% 35%,#0f4a31 0%,#05190f 62%,#030a06 100%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),var(--shadow);color:#eaf6ef}
+.scan::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 6px);pointer-events:none}
+.scan-h{position:relative;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.scan-h small{font-family:var(--f-head);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8fe7bb}
+.scan-h span{font-size:12px;color:#a3bfaf}
+.figure{position:relative;margin:8px auto 0;width:min(100%,340px);aspect-ratio:516/751}
+.figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.figure .sweep{position:absolute;left:8%;right:8%;height:2px;top:10%;background:linear-gradient(90deg,transparent,#5ff0a6,transparent);box-shadow:0 0 18px 4px rgba(95,240,166,.45);animation:sweep 4.5s ease-in-out infinite alternate;opacity:.75}
+@keyframes sweep{from{top:6%}to{top:92%}}
+.hs{position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;border:0;background:transparent;cursor:pointer;padding:0}
+.hs i{position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(62,224,143,.35),0 0 18px 4px rgba(62,224,143,.6)}
+.hs::before{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(143,231,187,.7);animation:ping 2.4s ease-out infinite}
+@keyframes ping{0%{transform:scale(.45);opacity:1}100%{transform:scale(1.25);opacity:0}}
+.hs[aria-pressed="true"] i{background:#3ee08f;box-shadow:0 0 0 5px rgba(62,224,143,.5),0 0 26px 8px rgba(62,224,143,.85)}
+.hs .lb{position:absolute;white-space:nowrap;left:calc(100% + 4px);top:50%;transform:translateY(-50%);padding:5px 10px;border-radius:10px;font-family:var(--f-head);font-size:11.5px;font-weight:700;color:#eaf6ef;background:rgba(10,40,26,.7);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.hs.l .lb{left:auto;right:calc(100% + 4px)}
+.hs[aria-pressed="true"] .lb{background:linear-gradient(140deg,#0c6a42,#25b875);border-color:transparent}
+.whole{position:relative;display:flex;justify-content:center;margin-top:6px}
+.whole button{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#eaf6ef;font-family:var(--f-head);font-weight:600;font-size:13px;cursor:pointer}
+.whole button[aria-pressed="true"]{background:linear-gradient(140deg,#0c6a42,#25b875);border-color:transparent}
+
+.ask{display:flex;flex-direction:column;gap:16px}
+.box{padding:20px 22px}
+.box h3{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:16px;font-weight:700}
+.box h3 .n{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--acc-soft);color:var(--acc);border:1px solid var(--acc-line);font-size:12px}
+.sx{display:flex;flex-wrap:wrap;gap:8px}
+.sx button{display:flex;align-items:center;gap:8px;padding:9px 13px 9px 10px;border-radius:14px;border:1px solid var(--gline);background:var(--glass-2);cursor:pointer;font-size:13.5px;font-weight:600;text-align:left;transition:transform .12s,border-color .12s}
+.sx button:hover{transform:translateY(-1px);border-color:var(--acc-line)}
+.sx button .ic{width:17px;height:17px;color:var(--acc)}
+.sx button[aria-pressed="true"]{background:linear-gradient(140deg,#0c6a42,#25b875);color:#fff;border-color:transparent;box-shadow:0 10px 22px -12px rgba(37,184,117,.9)}
+.sx button[aria-pressed="true"] .ic{color:#c9ffe3}
+.free textarea{width:100%;min-height:92px;resize:vertical;padding:14px 16px;border-radius:16px;border:1px solid var(--gline);background:var(--glass-2);outline:none;font-size:15px;line-height:1.5}
+.free textarea:focus{border-color:var(--acc-line)}
+.free .det{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;min-height:26px;align-items:center}
+.free .det small{color:var(--ink-3);font-size:12.5px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;font-family:var(--f-head);background:var(--acc-soft);color:var(--acc);border:1px solid var(--acc-line)}
+.go{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:16px 18px}
+.go .sum{font-size:14px;color:var(--ink-2)}
+.go .sum b{color:var(--ink);font-family:var(--f-head)}
+.cta{display:inline-flex;align-items:center;gap:10px;padding:13px 20px;border-radius:14px;border:0;cursor:pointer;font-family:var(--f-head);font-weight:700;font-size:14.5px;color:#03140b;background:linear-gradient(140deg,#5ff0a6,#25c47a);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 14px 28px -14px rgba(37,196,122,.9)}
+.cta[disabled]{opacity:.45;cursor:not-allowed;box-shadow:none}
+.link{border:0;background:none;color:var(--acc);font-weight:700;font-family:var(--f-head);font-size:13px;cursor:pointer;padding:6px 0}
+
+
+/* ===== tela 2: resultados ===== */
+.res{display:grid;grid-template-columns:330px minmax(0,1fr);gap:22px;padding-block:22px 60px;align-items:start}
+.res>aside{min-width:0;position:sticky;top:calc(env(safe-area-inset-top,0px) + 80px);display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 100px)}
+.qbox{padding:14px 16px}
+.qbox .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.qbox .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.qbox .chips .pill{font-size:11px;padding:3px 8px}
+.list{padding:8px;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.list-h{display:flex;justify-content:space-between;align-items:center;padding:6px 8px 4px}
+.list-h small{font-family:var(--f-head);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.pc{display:grid;grid-template-columns:auto minmax(0,1fr);gap:11px;align-items:center;padding:11px;border-radius:16px;border:1px solid transparent;background:transparent;cursor:pointer;text-align:left;width:100%}
+.pc:hover{background:var(--glass-2);border-color:var(--gline)}
+.pc[aria-current="true"]{background:linear-gradient(140deg,rgba(12,106,66,.95),rgba(37,184,117,.9));color:#fff;border-color:transparent}
+.pc[aria-current="true"] .tile{background:rgba(255,255,255,.18);box-shadow:none}
+.pc b{display:block;font-family:var(--f-head);font-weight:700;font-size:14px;line-height:1.25}
+.pc small{display:block;font-size:12px;opacity:.75}
+.meter{display:flex;align-items:center;gap:8px;margin-top:6px}
+.meter .bar{flex:1;height:5px;border-radius:9px;background:rgba(128,128,128,.22);overflow:hidden}
+.meter .bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#1fae6b,#5ff0a6)}
+.meter em{font-size:11px;font-weight:700;font-family:var(--f-head);white-space:nowrap}
+.pc .why{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.pc .why span{font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:7px;background:var(--acc-soft);color:var(--acc)}
+.pc[aria-current="true"] .why span{background:rgba(255,255,255,.18);color:#fff}
+.sep{font-family:var(--f-head);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);padding:10px 8px 2px}
+
+.doc{min-width:0;display:flex;flex-direction:column;gap:18px}
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);border-radius:28px;overflow:hidden;color:#eaf6ef;background:radial-gradient(90% 120% at 80% 30%,#0f4a31 0%,#062016 55%,#030b07 100%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),var(--shadow)}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.025) 58px 60px);pointer-events:none}
+.hero-main{position:relative;padding:28px 30px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.hero-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:10px;font-family:var(--f-head);font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#bdf3d6}
+.tag .ic{width:14px;height:14px}
+.hero h2{margin:14px 0 0;font-weight:800;font-size:clamp(30px,4vw,48px);line-height:1.02;letter-spacing:-.025em}
+.hero .sub{margin:2px 0 0;font-weight:600;color:#8fe7bb}
+.hero .obj{margin:12px 0 0;color:#d4ebdf;font-size:15px;max-width:60ch}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.2);cursor:pointer;font-family:var(--f-head);font-weight:700;font-size:13.5px;color:#03140b;background:linear-gradient(140deg,#ffffff,#d9fbe9);box-shadow:inset 0 1px 0 #fff,0 10px 24px -12px rgba(95,240,166,.7)}
+.btn[disabled]{opacity:.6;cursor:progress}
+.note{font-size:12.5px;color:#8fe7bb;min-height:1em}
+.mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:auto;padding-top:16px}
+.mini div{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.mini small{display:flex;align-items:center;gap:6px;font-family:var(--f-head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8fe7bb}
+.mini small .ic{width:14px;height:14px}
+.mini strong{display:block;font-family:var(--f-head);font-size:15px;line-height:1.25;margin-top:2px}
+
+.stage{position:relative;min-height:380px;display:flex;justify-content:center;align-items:center;gap:0;padding:16px 10px}
+.stage .bw{position:relative;height:100%;max-height:420px;aspect-ratio:var(--ar)}
+.stage .bw img{width:100%;height:100%;display:block;object-fit:contain}
+.stage.two .bw{max-height:400px}
+.mk{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(62,224,143,.45),0 0 20px 6px rgba(62,224,143,.75)}
+.mk::after{content:"";position:absolute;left:-10px;top:-10px;width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(143,231,187,.7);animation:ping 2.4s ease-out infinite}
+.fl{position:absolute;padding:10px 12px;border-radius:16px;background:linear-gradient(150deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 18px 30px -16px rgba(0,0,0,.8);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;max-width:180px}
+.fl small{display:block;font-family:var(--f-head);font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8fe7bb}
+.fl b{display:block;font-family:var(--f-head);font-size:13.5px;line-height:1.25}
+.fl.a{left:12px;top:18px}.fl.b{right:12px;bottom:18px}
+
+.metrics{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:14px}
+.mt{padding:16px 18px;min-width:0}
+.mt h4{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
+.mt h4 .ic{width:16px;height:16px;color:var(--acc)}
+.ring{display:flex;align-items:center;gap:14px}
+.ring .rv{position:relative;width:104px;height:104px;flex:none}
+.ring .rv svg{width:104px;height:104px;display:block}
+.ring .rv div{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring .rv b{font-family:var(--f-head);font-size:30px;font-weight:800;line-height:1}
+.ring .rv span{font-size:10px;color:var(--ink-3);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.ring p{margin:0;font-size:13px;color:var(--ink-2)}
+.weeks{display:grid;grid-template-columns:repeat(13,1fr);gap:5px}
+.weeks i{aspect-ratio:1;border-radius:6px;background:rgba(128,128,128,.18)}
+.weeks i.on{background:linear-gradient(140deg,#1fae6b,#5ff0a6);box-shadow:0 0 10px -2px rgba(62,224,143,.7)}
+.weeks i.t2{background:linear-gradient(140deg,#13774a,#2fbf7a)}
+.weeks i.t3{background:linear-gradient(140deg,#0c5537,#1c8f5b)}
+.wk-l{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--ink-3)}
+.wk-l b{color:var(--ink);font-family:var(--f-head)}
+.tiers{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.vias{display:flex;flex-direction:column;gap:7px}
+.vias div{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:var(--glass-2);border:1px solid var(--gline);font-weight:600;font-size:13.5px}
+.vias div b{font-family:var(--f-head);font-size:11px;font-weight:800;color:var(--acc);min-width:24px}
+
+.block{padding:20px 22px;min-width:0}
+.bh{display:flex;align-items:center;gap:12px;margin:0 0 14px}
+.bh h3{margin:0;font-weight:700;font-size:18px}
+.bsub{margin:-6px 0 14px;color:var(--ink-2);font-size:14px}
+.ficha{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.fi{display:flex;gap:11px;align-items:flex-start;padding:13px;border-radius:16px;background:var(--glass-2);border:1px solid var(--gline)}
+.fi .ic{color:var(--acc);margin-top:2px}
+.fi small{display:block;font-family:var(--f-head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+.fi span{display:block;font-weight:600;font-size:14px;line-height:1.4}
+
+.ativos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.at{position:relative;display:flex;flex-direction:column;gap:7px;padding:16px;border-radius:18px;background:var(--glass-2);border:1px solid var(--gline);min-width:0;overflow:hidden}
+.at::before{content:"";position:absolute;right:-40px;top:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--acc-soft),transparent 70%)}
+.at-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.at-h .no{font-family:var(--f-head);font-weight:800;font-size:11px;color:var(--ink-3);letter-spacing:.1em}
+.at-h b{display:block;font-family:var(--f-head);font-weight:700;font-size:14.5px;line-height:1.3;margin-top:2px}
+.dose{font-family:var(--f-head);font-weight:800;font-size:20px;line-height:1.1;color:var(--acc);font-variant-numeric:tabular-nums;white-space:nowrap}
+.via{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:8px;border:1px solid var(--gline);color:var(--ink-2);margin-top:4px}
+.at p{margin:0;color:var(--ink-2);font-size:14px}
+.at .ben{display:flex;gap:8px;font-weight:600;font-size:13.5px;padding:8px 10px;border-radius:12px;background:var(--acc-soft);border:1px solid var(--acc-line)}
+.at .ben .ic{color:var(--acc);width:16px;height:16px;margin-top:3px}
+.at ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.at li{display:flex;gap:8px;font-size:13.5px}
+.at li .ic{width:16px;height:16px;color:var(--acc);margin-top:3px}
+.comp{display:grid;border-radius:12px;overflow:hidden;border:1px solid var(--gline)}
+.comp div{display:flex;justify-content:space-between;gap:10px;padding:6px 10px;font-size:13px;border-top:1px solid var(--gline)}
+.comp div:first-child{border-top:0}
+.comp b{color:var(--acc);white-space:nowrap}
+
+.pares{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.par{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;background:var(--glass-2);border:1px solid var(--gline)}
+.par b{display:block;font-family:var(--f-head);font-weight:700;font-size:14px}
+.par>div>span{display:block;color:var(--ink-2);font-size:13.5px;margin-top:2px}
+.intro{margin:-4px 0 12px;color:var(--ink-2)}
+.lista{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px}
+.lista li{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border-radius:14px;background:var(--glass-2);border:1px solid var(--gline);font-weight:500}
+.lista .ic{color:var(--acc);margin-top:2px}
+.serv{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.sv{position:relative;overflow:hidden;padding:16px;border-radius:18px;color:#fff;background:radial-gradient(120% 120% at 100% 0%,rgba(95,240,166,.35),transparent 55%),linear-gradient(150deg,#0b4b30,#06261a);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.sv .tile{margin-bottom:10px}
+.sv b{display:block;font-family:var(--f-head);font-weight:700;font-size:14.5px}
+.sv p{margin:4px 0 0;font-size:13.5px;color:#cfe9db}
+.etapas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;counter-reset:e}
+.etapas li{padding:14px;border-radius:16px;background:var(--glass-2);border:1px solid var(--gline)}
+.etapas li::before{counter-increment:e;content:counter(e,decimal-leading-zero);display:block;font-family:var(--f-head);font-weight:800;font-size:22px;color:var(--acc);margin-bottom:4px}
+.etapas b{display:block;font-family:var(--f-head);font-weight:700;font-size:14px}
+.etapas p{margin:3px 0 0;color:var(--ink-2);font-size:13.5px}
+.destaque{display:flex;gap:16px;padding:22px;border-radius:22px;color:#fff;background:radial-gradient(100% 140% at 0% 0%,rgba(95,240,166,.3),transparent 55%),linear-gradient(150deg,#0b4b30,#05200f);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),var(--shadow)}
+.destaque h3{margin:0 0 4px;font-size:17px}
+.destaque p{margin:4px 0 0;color:#d4ebdf;max-width:75ch}
+.alerta{display:flex;gap:14px;padding:18px 20px;border-radius:22px;border:1px solid rgba(224,169,59,.45);background:linear-gradient(150deg,rgba(224,169,59,.14),rgba(224,169,59,.04))}
+.alerta .tile{background:linear-gradient(140deg,#a8701b,#f0b94a);box-shadow:0 8px 18px -10px rgba(240,185,74,.8)}
+.alerta h3{margin:0 0 6px;font-size:16px}
+.alerta ul{margin:0;padding-left:18px;display:grid;gap:3px;color:var(--ink-2)}
+.texto p{margin:0;color:var(--ink-2);max-width:75ch}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.duo>div{padding:16px;border-radius:16px;background:var(--glass-2);border:1px solid var(--gline)}
+.duo h4{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:14px;color:var(--acc)}
+.duo ul{margin:0;padding-left:18px;display:grid;gap:4px;color:var(--ink-2);font-size:14px}
+.planos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.plano{padding:16px;border-radius:18px;background:var(--glass-2);border:1px solid var(--gline)}
+.plano:last-child{color:#fff;background:radial-gradient(120% 120% at 100% 0%,rgba(95,240,166,.35),transparent 55%),linear-gradient(150deg,#0b4b30,#06261a);border-color:rgba(255,255,255,.12)}
+.plano h4{margin:0;font-size:22px;font-weight:800}
+.plano .dur{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--acc);margin:2px 0 10px}
+.plano:last-child .dur{color:#8fe7bb}
+.plano ul{margin:0;padding-left:16px;display:grid;gap:5px;font-size:13.5px}
+.manejo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mj{padding:16px;border-radius:16px;background:var(--glass-2);border:1px solid var(--gline)}
+.mj h4{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:15px}
+.mj dl{margin:0}
+.mj dt{font-family:var(--f-head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-top:9px}
+.mj dd{margin:1px 0 0;font-size:13.5px;color:var(--ink-2)}
+.mj dd.med{color:var(--ink);font-weight:600}
+.gal{display:grid;gap:10px;grid-template-columns:2fr 1fr;grid-auto-rows:150px}
+.gal figure{position:relative;margin:0;border-radius:20px;overflow:hidden;border:1px solid var(--gline)}
+.gal figure:first-child{grid-row:span 2}
+.gal.n2{grid-template-columns:1fr 1fr;grid-auto-rows:220px}.gal.n2 figure:first-child{grid-row:auto}
+.gal.n4{grid-template-columns:2fr 1fr 1fr}
+.gal img{width:100%;height:100%;object-fit:cover;display:block}
+
+@media (max-width:1150px){.metrics{grid-template-columns:1fr 1fr}.metrics .mt:nth-child(2){grid-column:1/-1;order:3}}
+@media (max-width:980px){
+  .ig{grid-template-columns:1fr}.scan{max-width:520px;width:100%;margin:0 auto}
+  .res{grid-template-columns:1fr}.res>aside{position:static;max-height:none}
+  .list{flex-direction:row;overflow-x:auto;padding:8px}.list-h,.sep{display:none}.pc{width:260px;flex:none}
+  .hero{grid-template-columns:1fr}.stage{min-height:320px;order:-1}.planos{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .brand span,.steps button span{display:none}.brand img{height:34px}.top .wrap{gap:8px}.steps button{padding:8px 10px}
+  .hero-main{padding:20px 18px}.mini{grid-template-columns:1fr 1fr}
+  .metrics{grid-template-columns:1fr}.ativos,.duo,.manejo{grid-template-columns:1fr}
+  .block,.box{padding:16px}.fl{max-width:150px;padding:8px 10px}.fl b{font-size:12px}
+  .gal,.gal.n4{grid-template-columns:1fr 1fr;grid-auto-rows:120px}.gal figure:first-child{grid-column:1/-1;grid-row:auto}
+  .weeks{gap:3px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+
+/* ===== agente de teste genético ===== */
+.top .nav-l{display:flex;align-items:center;gap:8px;padding:8px 13px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#cfe9db;font-family:var(--f-head);font-weight:600;font-size:12.5px;text-decoration:none;flex:none}
+.top .nav-l:hover{background:rgba(255,255,255,.12)}
+.top .nav-l .ic{width:16px;height:16px}
+.steps button[disabled]{opacity:.45;cursor:not-allowed}
+.steps button.ok b{background:#3ee08f;color:#03140b}
+.gx{padding-block:30px 70px}
+.gx-head{max-width:780px;margin-bottom:22px}
+.gx-head h1{margin:6px 0 6px;font-weight:800;font-size:clamp(26px,3.6vw,42px);line-height:1.08;letter-spacing:-.02em}
+.gx-head p{margin:0;color:var(--ink-2);font-size:16px}
+.g2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,1fr);gap:20px;align-items:start}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+.drop{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;min-height:240px;padding:26px;border-radius:26px;overflow:hidden;color:#eaf6ef;background:radial-gradient(120% 80% at 50% 30%,#0f4a31 0%,#05190f 62%,#030a06 100%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),var(--shadow);cursor:pointer;transition:border-color .15s}
+.drop::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 6px);pointer-events:none}
+.drop.over{border-color:#5ff0a6}
+.drop .dz-ic{position:relative;display:grid;place-items:center;width:64px;height:64px;border-radius:20px;background:linear-gradient(140deg,#0c6a42,#2fd086);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 14px 30px -12px rgba(31,208,134,.9)}
+.drop .dz-ic .ic{width:30px;height:30px;color:#fff}
+.drop b{position:relative;font-family:var(--f-head);font-size:18px;font-weight:700}
+.drop span{position:relative;color:#a3bfaf;font-size:13.5px;max-width:42ch}
+.drop input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.file{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--glass-2);border:1px solid var(--gline)}
+.file .meta{flex:1;min-width:0}
+.file .meta b{display:block;font-family:var(--f-head);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.file .meta small{color:var(--ink-3);font-size:12.5px}
+.xb{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;border:1px solid var(--gline);background:transparent;cursor:pointer;color:var(--ink-2);flex:none}
+.xb:hover{color:var(--ink);border-color:var(--acc-line)}
+.or{display:flex;align-items:center;gap:12px;color:var(--ink-3);font-size:12px;font-family:var(--f-head);font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--gline)}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fld label,.lbl{font-family:var(--f-head);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.inp,.ta{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--gline);background:var(--glass-2);outline:none;font-size:15px;line-height:1.5}
+.ta{min-height:96px;resize:vertical}
+.ta.big{min-height:160px}
+.inp:focus,.ta:focus{border-color:var(--acc-line)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{padding:9px 14px;border-radius:12px;border:1px solid var(--gline);background:var(--glass-2);cursor:pointer;font-weight:600;font-size:13.5px}
+.seg button[aria-pressed="true"]{background:linear-gradient(140deg,#0c6a42,#25b875);color:#fff;border-color:transparent}
+.priv{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ink-2)}
+.priv .ic{width:17px;height:17px;color:var(--acc);margin-top:2px}
+.err{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:14px;border:1px solid rgba(224,110,80,.5);background:rgba(224,110,80,.1);font-size:14px;font-weight:600}
+.err .ic{color:#f08a6a;margin-top:2px}
+
+.yn{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.yn button{display:flex;align-items:center;gap:14px;padding:18px;border-radius:20px;border:1px solid var(--gline);background:var(--glass-2);cursor:pointer;text-align:left}
+.yn button b{display:block;font-family:var(--f-head);font-size:17px;font-weight:800}
+.yn button small{display:block;color:var(--ink-2);font-size:13px}
+.yn button[aria-pressed="true"]{background:linear-gradient(140deg,rgba(12,106,66,.95),rgba(37,184,117,.9));color:#fff;border-color:transparent;box-shadow:0 14px 30px -16px rgba(37,184,117,.9)}
+.yn button[aria-pressed="true"] small{color:#d4f5e3}
+.yn button[aria-pressed="true"] .tile{background:rgba(255,255,255,.18);box-shadow:none}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
+.pgrid button{display:flex;align-items:center;gap:10px;padding:10px;border-radius:16px;border:1px solid var(--gline);background:var(--glass-2);cursor:pointer;text-align:left;min-width:0}
+.pgrid button b{display:block;font-family:var(--f-head);font-size:13.5px;line-height:1.2}
+.pgrid button small{display:block;font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pgrid button .ck{margin-left:auto;display:grid;place-items:center;width:22px;height:22px;border-radius:7px;border:1.5px solid var(--gline);flex:none}
+.pgrid button .ck .ic{width:14px;height:14px;opacity:0}
+.pgrid button[aria-pressed="true"]{border-color:var(--acc-line);background:var(--acc-soft)}
+.pgrid button[aria-pressed="true"] .ck{background:linear-gradient(140deg,#1fae6b,#5ff0a6);border-color:transparent;color:#03140b}
+.pgrid button[aria-pressed="true"] .ck .ic{opacity:1}
+.pgrid button .rec{display:block;font-size:10.5px;font-weight:700;color:var(--acc);font-family:var(--f-head);letter-spacing:.04em}
+.nav2{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 16px}
+.ghost{display:inline-flex;align-items:center;gap:8px;padding:12px 16px;border-radius:14px;border:1px solid var(--gline);background:var(--glass-2);cursor:pointer;font-family:var(--f-head);font-weight:700;font-size:14px}
+.ghost .ic{width:17px;height:17px}
+
+/* painel da leitura */
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px);display:flex;flex-direction:column;gap:12px;max-height:calc(100vh - 104px);overflow:auto;border-radius:26px}
+.reading{position:relative;overflow:hidden;padding:20px;border-radius:26px;color:#eaf6ef;background:radial-gradient(110% 70% at 80% 0%,#0f4a31 0%,#062016 55%,#030b07 100%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),var(--shadow)}
+.reading::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.025) 58px 60px);pointer-events:none}
+.reading>*{position:relative}
+.reading small.k{font-family:var(--f-head);font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8fe7bb}
+.reading h3{margin:4px 0 6px;font-size:18px;font-weight:800;line-height:1.2}
+.reading p{margin:0;color:#cfe5d9;font-size:13.5px}
+.gene{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:10px 0;border-top:1px solid rgba(255,255,255,.09)}
+.gene:first-child{border-top:0}
+.gene .gn{min-width:74px;padding:5px 8px;border-radius:10px;text-align:center;font-family:var(--f-head);font-weight:800;font-size:12.5px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.gene .gn small{display:block;font-weight:600;font-size:10px;color:#8fe7bb;letter-spacing:.02em}
+.gene b{font-family:var(--f-head);font-size:13px}
+.gene p{font-size:12.5px;margin-top:1px}
+.imp{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:7px;font-family:var(--f-head);font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;vertical-align:1px}
+.imp.alto{background:rgba(240,138,106,.18);color:#ffb39b;border:1px solid rgba(240,138,106,.4)}
+.imp.moderado{background:rgba(240,185,74,.15);color:#ffd88a;border:1px solid rgba(240,185,74,.4)}
+.imp.baixo{background:rgba(62,224,143,.12);color:#8fe7bb;border:1px solid rgba(62,224,143,.35)}
+.genes{margin-top:12px}
+.areas{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.areas span{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:10px;font-family:var(--f-head);font-size:11.5px;font-weight:700;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.areas span i{width:7px;height:7px;border-radius:50%;background:#5ff0a6;box-shadow:0 0 8px #5ff0a6}
+.areas span.media i{background:#f0c25a;box-shadow:0 0 8px #f0c25a}
+.areas span.baixa i{background:#7b9587;box-shadow:none}
+.more{margin-top:8px;border:0;background:none;color:#8fe7bb;font-family:var(--f-head);font-weight:700;font-size:12.5px;cursor:pointer;padding:4px 0}
+.alr{margin-top:12px;padding:10px 12px;border-radius:14px;background:rgba(240,185,74,.1);border:1px solid rgba(240,185,74,.35)}
+.alr b{display:flex;align-items:center;gap:6px;font-family:var(--f-head);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#ffd88a}
+.alr b .ic{width:14px;height:14px}
+.alr ul{margin:6px 0 0;padding-left:16px;font-size:12.5px;color:#f3e6c8;display:grid;gap:3px}
+
+/* carregando */
+.busy{display:flex;flex-direction:column;align-items:center;gap:16px;padding:46px 24px;text-align:center;border-radius:26px;color:#eaf6ef;background:radial-gradient(110% 80% at 50% 40%,#0f4a31 0%,#05190f 62%,#030a06 100%);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),var(--shadow)}
+.helix{display:flex;gap:7px;height:76px;align-items:center}
+.helix i{position:relative;width:4px;height:100%}
+.helix i::before,.helix i::after{content:"";position:absolute;left:-3px;width:10px;height:10px;border-radius:50%;background:#5ff0a6;box-shadow:0 0 12px #5ff0a6;animation:hx 1.8s ease-in-out infinite;animation-delay:inherit}
+.helix i::after{background:#1fae6b;box-shadow:0 0 10px #1fae6b;animation-name:hx2}
+@keyframes hx{0%,100%{top:0}50%{top:calc(100% - 10px)}}
+@keyframes hx2{0%,100%{top:calc(100% - 10px)}50%{top:0}}
+.busy b{font-family:var(--f-head);font-size:18px}
+.busy span{color:#a3bfaf;font-size:14px;min-height:1.4em}
+
+/* resultado */
+.rs{display:flex;flex-direction:column;gap:18px;padding-block:24px 70px}
+.hero.rh{grid-template-columns:minmax(0,1fr)}
+.rh .hero-main{padding:30px 32px}
+.hero .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.hero .ghost2{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);color:#eaf6ef;cursor:pointer;font-family:var(--f-head);font-weight:700;font-size:13.5px}
+.hero .ghost2 .ic{width:17px;height:17px}
+.plan{display:grid;gap:12px}
+.pl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;padding:18px 20px;border-radius:22px;background:var(--glass-2);border:1px solid var(--gline);min-width:0}
+.pl .num{font-family:var(--f-head);font-weight:800;font-size:30px;line-height:1;color:var(--acc);width:44px}
+.pl h4{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0;font-size:19px;font-weight:800}
+.pl .st{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:9px;font-family:var(--f-head);font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.st.ja_aplica{background:var(--acc-soft);color:var(--acc);border:1px solid var(--acc-line)}
+.st.adaptar{background:rgba(240,185,74,.14);color:#c98a12;border:1px solid rgba(240,185,74,.45)}
+.st.implantar{background:rgba(120,150,200,.14);color:#5f86c9;border:1px solid rgba(120,150,200,.45)}
+.st.fase{background:transparent;color:var(--ink-2);border:1px solid var(--gline)}
+.pl p{margin:8px 0 0;color:var(--ink-2);font-size:14.5px}
+.pl .lb2{display:block;margin-top:12px;font-family:var(--f-head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.chips span{padding:3px 9px;border-radius:8px;font-size:12px;font-weight:600;background:var(--glass-2);border:1px solid var(--gline)}
+.chips.g span{background:var(--acc-soft);border-color:var(--acc-line);color:var(--acc);font-family:var(--f-head);font-weight:700}
+.pl .how{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--acc-soft);border:1px solid var(--acc-line);font-size:14px;font-weight:500;color:var(--ink)}
+.pl .src{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:12.5px;color:var(--ink-3)}
+.pl .src a{display:inline-flex;align-items:center;gap:6px;color:var(--acc);font-family:var(--f-head);font-weight:700;text-decoration:none}
+.pl .src a .ic{width:15px;height:15px}
+.inj{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.inj div{padding:14px;border-radius:16px;background:var(--glass-2);border:1px solid var(--gline)}
+.inj b{display:flex;justify-content:space-between;gap:8px;align-items:center;font-family:var(--f-head);font-size:14px}
+.inj p{margin:6px 0 0;color:var(--ink-2);font-size:13.5px}
+.av{padding:2px 8px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.av.usar{background:var(--acc-soft);color:var(--acc);border:1px solid var(--acc-line)}
+.av.ajustar{background:rgba(240,185,74,.14);color:#c98a12;border:1px solid rgba(240,185,74,.45)}
+.av.evitar{background:rgba(224,110,80,.14);color:#d0613f;border:1px solid rgba(224,110,80,.45)}
+.sv small{display:block;margin-top:8px;font-family:var(--f-head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8fe7bb}
+.sv .cd{margin-top:8px;font-size:12.5px;color:#f3e6c8}
+.fine{font-size:12.5px;color:var(--ink-3);margin:2px 0 0}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;font-family:var(--f-head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding:8px 10px;border-bottom:1px solid var(--gline)}
+.tbl td{padding:10px;border-bottom:1px solid var(--gline);vertical-align:top;color:var(--ink-2)}
+.tbl td b{color:var(--ink);font-family:var(--f-head)}
+.tbl .imp.alto{color:#d0613f}.tbl .imp.moderado{color:#c98a12}.tbl .imp.baixo{color:var(--acc)}
+.tw{overflow-x:auto}
+.disc{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-radius:18px;border:1px dashed var(--gline);color:var(--ink-2);font-size:13.5px}
+.disc .ic{color:var(--acc);margin-top:2px}
+
+@media (max-width:980px){
+  .g2{grid-template-columns:1fr}.side{position:static;max-height:none}
+}
+@media (max-width:640px){
+  .top .nav-l{display:none}.row2,.yn{grid-template-columns:1fr}
+  .pl{grid-template-columns:1fr;gap:6px}.pl .num{font-size:24px}
+  .rh .hero-main{padding:22px 18px}
+}
+
+/* plano de tratamento */
+#s4{padding-block:22px 70px}
+.qbox .pac{font-family:var(--f-head);font-weight:700;font-size:13.5px;margin-top:4px}
+.list .pk{grid-template-columns:auto minmax(0,1fr);align-items:start;padding:9px;cursor:default}
+.list .pk .po{border:0;background:none;color:inherit;text-align:left;padding:0;cursor:pointer;min-width:0;font:inherit}
+.list .pk .cmp{display:block;margin-top:5px;font-size:11.5px;line-height:1.4;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.list .pk[aria-current="true"] .cmp{color:rgba(255,255,255,.88)}
+.cb{width:26px;height:26px;margin-top:2px;border-radius:8px;border:1.5px solid var(--gline);background:var(--glass-2);display:grid;place-items:center;cursor:pointer;color:transparent;padding:0;flex:none}
+.cb .ic{width:16px;height:16px}
+.cb[aria-checked="true"]{background:linear-gradient(140deg,#0c6a42,#25b875);border-color:transparent;color:#fff}
+.pk[aria-current="true"] .cb{border-color:rgba(255,255,255,.55)}
+.pk[aria-current="true"] .cb[aria-checked="true"]{background:#fff;color:#0c6a42}
+.list .vazio{margin:4px 8px 8px;font-size:12.5px;color:var(--ink-3)}
+.doc .vazio{margin:0;color:var(--ink-2)}
+.hero .pt button{color:#eaf6ef;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.2);display:inline-flex;align-items:center;gap:6px;padding:9px 12px}
+.hero .pt button .ic{width:15px;height:15px}
+.hero .pt button[aria-pressed="true"]{background:linear-gradient(140deg,#0c6a42,#25b875);border-color:transparent;color:#fff}
+.hero .acts .btn .ic{width:17px;height:17px}
+.cps{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px;margin-top:6px}
+.cps div{padding:9px 11px;border-radius:12px;background:var(--glass-2);border:1px solid var(--gline);min-width:0}
+.cps b{display:block;font-family:var(--f-head);font-size:13px;line-height:1.3}
+.cps span{display:block;font-size:12px;font-weight:700;color:var(--acc);margin-top:2px}
+.cps small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:3px;line-height:1.35}
+.pl .src-a{display:inline-flex;gap:14px;flex-wrap:wrap}
+.pl .src .link{display:inline-flex;align-items:center;gap:6px;padding:0}
+.pl .src .link .ic{width:15px;height:15px}
+.pl .src .link.mut{color:var(--ink-3)}
+.pl .adj{margin-top:10px;font-size:13.5px;color:var(--ink-2)}
+.doc .back{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.doc .back .link{display:inline-flex;align-items:center;gap:6px}
+.doc .back .link .ic{width:16px;height:16px}
+.ghost3{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;border:1px solid var(--acc-line);background:var(--acc-soft);color:var(--acc);cursor:pointer;font-family:var(--f-head);font-weight:700;font-size:13.5px}
+.ghost3 .ic,.doc .back .btn .ic{width:16px;height:16px}
+.gw .adj{margin-top:10px;font-size:13.5px;color:var(--ink-2)}
+.gw .how{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--acc-soft);border:1px solid var(--acc-line);font-size:14px;font-weight:500}
+@media (max-width:980px){ .list .pk{width:280px} }
+
+/* PDF */
+#pdf-stage{position:fixed;left:-12000px;top:0;width:794px;pointer-events:none}
+.gp{width:794px;padding:28px 34px 20px;color:#e9f6ee;font-family:var(--f-body);font-size:11.5px;line-height:1.5;background-color:#050d09;background-image:radial-gradient(520px 380px at 92% 4%,rgba(31,174,107,.30),transparent 70%),repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.022) 58px 60px)}
+.gp h1,.gp h2,.gp h3,.gp h4{font-family:var(--f-head);margin:0}
+.gp .hd{display:flex;justify-content:space-between;align-items:center}
+.gp .hd img{height:40px}
+.gp .hd span{font-family:var(--f-head);font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8fe7bb;text-align:right}
+.gp h1{margin-top:18px;font-size:30px;font-weight:800;line-height:1.05}
+.gp .lead{margin:8px 0 0;color:#cfe5d9;font-size:12.5px}
+.gp .sec{margin-top:18px}
+.gp h2{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8fe7bb;margin-bottom:8px}
+.gp .c{padding:12px 14px;border-radius:14px;background:linear-gradient(150deg,rgba(255,255,255,.09),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.12);border-top-color:rgba(255,255,255,.24);margin-bottom:8px}
+.gp .c h3{font-size:14px;font-weight:800}
+.gp .c h3 em{font-style:normal;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8fe7bb;margin-left:8px}
+.gp .c p{margin:4px 0 0;color:#cfe5d9}
+.gp .c .k{display:block;margin-top:6px;font-family:var(--f-head);font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3ee08f}
+.gp .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gp ul{margin:0;padding-left:16px;color:#cfe5d9;display:grid;gap:2px}
+.gp table{width:100%;border-collapse:collapse;font-size:10.5px}
+.gp td,.gp th{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.1);text-align:left;vertical-align:top;color:#cfe5d9}
+.gp th{font-family:var(--f-head);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:#8fe7bb}
+.gp .ft{margin-top:18px;padding-top:10px;border-top:1px solid rgba(255,255,255,.12);font-size:9.5px;color:#8aa597}
+.gp .avoid{break-inside:avoid;page-break-inside:avoid}
+.gp .pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.gp .pills span{padding:2px 8px;border-radius:7px;font-size:9.5px;font-weight:700;background:rgba(62,224,143,.14);color:#8fe7bb;border:1px solid rgba(62,224,143,.35)}
+.gp .c .meta{font-size:10px;color:#8fe7bb;margin-top:2px}
+.gp table.cp{margin-top:3px}
+.gp table.cp td{padding:4px 6px}
+.gp table.cp td:last-child{white-space:nowrap;text-align:right;color:#8fe7bb;font-weight:700}
+.gp table.cp small{color:#8aa597;font-size:9.5px}
+.gp .c.al{border-color:rgba(240,185,74,.4)}
+.gp.light{color:#10281b;background-color:#f6faf7;background-image:radial-gradient(520px 380px at 92% 4%,rgba(31,174,107,.13),transparent 70%)}
+.gp.light .hd span,.gp.light h2,.gp.light th,.gp.light .c h3 em,.gp.light .c .meta,.gp.light table.cp td:last-child{color:#0f7a4a}
+.gp.light .lead,.gp.light .c p,.gp.light ul,.gp.light td{color:#2c4a3a}
+.gp.light .c{background:#ffffff;border:1px solid #d6e7dd;border-top-color:#d6e7dd}
+.gp.light .c .k{color:#13995a}
+.gp.light td,.gp.light th{border-bottom-color:#e0ebe4}
+.gp.light table.cp small{color:#6b8679}
+.gp.light .pills span{background:#e3f5eb;color:#0f7a4a;border-color:#bfe5cf}
+.gp.light .c.al{border-color:#ecd29b;background:#fffaf0}
+.gp.light .hd img{background:#07140d;padding:6px 10px;border-radius:10px;height:46px}
+.gp.light .ft{border-top-color:#d6e7dd;color:#5d7a6b}
+
+
+/* predisposições */
+.pd{display:flex;flex-direction:column;gap:10px}
+.pc2{padding:16px 18px;border-radius:20px;background:var(--glass-2);border:1px solid var(--gline)}
+.pc2.on{border-color:var(--acc-line);background:linear-gradient(150deg,var(--acc-soft),transparent 70%),var(--glass-2)}
+.pc2 .hd{display:flex;align-items:center;gap:12px}
+.pc2 .hd b{display:block;font-family:var(--f-head);font-size:15px;line-height:1.25}
+.pc2 .hd small{display:block;color:var(--ink-3);font-size:12px}
+.sw{margin-left:auto;position:relative;width:46px;height:26px;border-radius:99px;border:1px solid var(--gline);background:rgba(128,128,128,.25);cursor:pointer;flex:none;padding:0}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.3);transition:left .15s}
+.sw[aria-checked="true"]{background:linear-gradient(140deg,#1fae6b,#5ff0a6);border-color:transparent}
+.sw[aria-checked="true"]::after{left:22px}
+.ev{display:grid;gap:6px;margin-top:12px}
+.evr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 11px;border-radius:13px;background:var(--glass-2);border:1px solid var(--gline)}
+.evr b{font-family:var(--f-head);font-size:13px}
+.evr .gt{font-family:var(--f-head);font-weight:700;font-size:12px;color:var(--acc);margin-left:6px}
+.evr p{margin:2px 0 0;font-size:12px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tg3{display:flex;border-radius:10px;overflow:hidden;border:1px solid var(--gline);flex:none}
+.tg3 button{padding:5px 9px;border:0;background:transparent;cursor:pointer;font-family:var(--f-head);font-size:11px;font-weight:700;color:var(--ink-3)}
+.tg3 button[aria-pressed="true"].a{background:rgba(240,138,106,.2);color:#d0613f}
+.tg3 button[aria-pressed="true"].n{background:var(--acc-soft);color:var(--acc)}
+.add{display:flex;flex-wrap:wrap;gap:6px}
+.add button{padding:7px 11px;border-radius:11px;border:1px dashed var(--gline);background:transparent;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.add button:hover{border-color:var(--acc-line);color:var(--acc)}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.stat div{padding:10px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);text-align:center}
+.stat b{display:block;font-family:var(--f-head);font-size:24px;font-weight:800;line-height:1}
+.stat small{font-size:10.5px;color:#a3bfaf;font-family:var(--f-head);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.warn{margin-top:12px;padding:10px 12px;border-radius:14px;background:rgba(240,185,74,.1);border:1px solid rgba(240,185,74,.35);font-size:12.5px;color:#f3e6c8}
+.atv{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.atv span{padding:4px 9px;border-radius:9px;font-size:11.5px;font-weight:700;font-family:var(--f-head);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.fmt{display:grid;gap:10px}
+.fm{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:14px;padding:14px 16px;border-radius:18px;background:var(--glass-2);border:1px solid var(--gline)}
+.fm h4{margin:0;font-size:14.5px;font-weight:800}
+.fm .gs{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.fm .gs span{padding:2px 7px;border-radius:7px;font-size:11px;font-weight:700;font-family:var(--f-head);background:var(--acc-soft);color:var(--acc);border:1px solid var(--acc-line)}
+.fm .best{display:flex;flex-direction:column;gap:6px}
+.fm .best b{font-family:var(--f-head);font-size:15px}
+.fm .best p{margin:0;color:var(--ink-2);font-size:13.5px}
+.fm .alt{font-size:12.5px;color:var(--ink-3)}
+.st.recurso{background:rgba(160,120,220,.14);color:#8c62d0;border:1px solid rgba(160,120,220,.45)}
+.st.tecnologia{background:rgba(80,170,210,.14);color:#2f8fb8;border:1px solid rgba(80,170,210,.45)}
+.st.ajuste{background:rgba(240,185,74,.14);color:#c98a12;border:1px solid rgba(240,185,74,.45)}
+.adj{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(240,185,74,.12);border:1px solid rgba(240,185,74,.4);font-size:13.5px}
+@media (max-width:640px){.fm{grid-template-columns:1fr}.stat b{font-size:20px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Hormones Mentoring Elite, protocolos"><img src="/logo-hormones.webp" alt="Hormones Mentoring Elite" width="760" height="294"><span>Teste<br>genético</span></a>
+    <nav class="steps" aria-label="Etapas">
+      <button type="button" data-step="1" aria-current="true"><b>1</b><span>Laudo</span></button>
+      <button type="button" data-step="2" aria-current="false" disabled><b>2</b><span>Predisposições</span></button>
+      <button type="button" data-step="3" aria-current="false" disabled><b>3</b><span>Clínica</span></button>
+      <button type="button" data-step="4" aria-current="false" disabled><b>4</b><span>Plano</span></button>
+    </nav>
+    <a class="nav-l" href="/"><span data-i="layers"></span><span>Protocolos</span></a>
+    <button class="mode" type="button" id="mode" aria-label="Alternar modo claro e escuro"></button>
+  </div>
+</header>
+
+<!-- 1. laudo -->
+<main class="wrap gx" id="s1">
+  <div class="gx-head">
+    <div class="eyebrow">Leitor de teste genético</div>
+    <h1>O que o DNA do paciente pede?</h1>
+    <p>Envie o laudo em PDF. A leitura acontece aqui no seu navegador: a página procura genes, variantes e achados, marca as predisposições e cruza com os 12 protocolos Hormones. O laudo não sai do seu computador.</p>
+  </div>
+  <div class="g2">
+    <div class="col">
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="application/pdf,.pdf,.txt" multiple>
+        <span class="dz-ic"><span data-i="dna"></span></span>
+        <b>Enviar laudo genético</b>
+        <span>Arraste o PDF ou toque para escolher. Funciona com PDF de texto; laudo escaneado como foto não é lido.</span>
+      </label>
+      <div id="files" class="col" style="gap:8px"></div>
+      <div class="or">ou cole o texto</div>
+      <section class="glass box"><textarea class="ta big" id="texto" placeholder="Cole aqui o conteúdo do laudo: genes, variantes (rsID), genótipos e interpretações."></textarea></section>
+    </div>
+    <div class="col">
+      <section class="glass box">
+        <h3><span class="n">1</span>Paciente</h3>
+        <div class="col" style="gap:14px">
+          <div class="fld"><span class="lbl">Sexo</span><div class="seg" id="sexo"><button type="button" data-v="Feminino" aria-pressed="false">Feminino</button><button type="button" data-v="Masculino" aria-pressed="false">Masculino</button></div></div>
+          <div class="fld"><label for="idade">Idade</label><input class="inp" id="idade" inputmode="numeric" maxlength="3" placeholder="Ex.: 42"></div>
+          <div class="fld"><span class="lbl">Objetivos do paciente</span><div class="sx" id="obj"></div></div>
+        </div>
+      </section>
+      <section class="glass go">
+        <div class="priv"><span data-i="lock"></span><span>Sem inteligência artificial e sem envio: o laudo é lido no próprio navegador e nada fica salvo.</span></div>
+        <div id="err1"></div>
+        <button class="cta" type="button" id="ler" disabled><span data-i="dna"></span>Ler laudo</button>
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- 2. predisposições -->
+<main class="wrap gx" id="s2" hidden>
+  <div class="g2">
+    <div class="col">
+      <div class="gx-head" style="margin:0">
+        <div class="eyebrow">Etapa 2 de 4</div>
+        <h1>Predisposições encontradas</h1>
+        <p>Confira o que a leitura marcou. Cada laboratório escreve de um jeito: ligue, desligue ou corrija cada gene antes de seguir.</p>
+      </div>
+      <div class="pd" id="pd"></div>
+      <section class="glass box"><h3><span class="n">+</span>Adicionar predisposição à mão</h3><div class="add" id="add"></div></section>
+      <section class="glass nav2"><button class="ghost" type="button" data-go="1"><span data-i="arrow-left"></span>Laudo</button><button class="cta" type="button" id="to3">Continuar<span data-i="arrow-right"></span></button></section>
+    </div>
+    <aside class="side" id="side2" aria-label="Resumo da leitura"></aside>
+  </div>
+</main>
+
+<!-- 3. clínica -->
+<main class="wrap gx" id="s3" hidden>
+  <div class="g2">
+    <div class="col">
+      <div class="gx-head" style="margin:0">
+        <div class="eyebrow">Etapa 3 de 4</div>
+        <h1>Sua clínica tem injetáveis?</h1>
+        <p>Com isso a indicação usa o que você já aplica e mostra o que precisaria implantar.</p>
+      </div>
+      <div class="yn" id="yn">
+        <button type="button" data-v="sim" aria-pressed="false"><span class="tile"><span data-i="syringe"></span></span><span><b>Sim</b><small>Aplico injetáveis na clínica</small></span></button>
+        <button type="button" data-v="nao" aria-pressed="false"><span class="tile"><span data-i="ban"></span></span><span><b>Ainda não</b><small>Não trabalho com injetáveis</small></span></button>
+      </div>
+      <div id="inj-det" class="col" hidden>
+        <section class="glass box"><h3><span class="n">A</span>Quais protocolos Hormones você já aplica?</h3><div class="pgrid" id="pgrid"></div></section>
+        <section class="glass box"><h3><span class="n">B</span>Seus injetáveis próprios</h3><textarea class="ta" id="outros" placeholder="Um por linha ou separados por vírgula. Ex.: NAD+ endovenoso, glutationa, vitamina D intramuscular, blend termogênico"></textarea></section>
+      </div>
+      <section class="glass box"><h3><span class="n">C</span>Quais tecnologias você tem?</h3><div class="sx" id="tec"></div></section>
+      <section class="glass nav2"><button class="ghost" type="button" data-go="2"><span data-i="arrow-left"></span>Predisposições</button><button class="cta" type="button" id="gerar" disabled><span data-i="sparkles"></span>Gerar indicação</button></section>
+    </div>
+    <aside class="side" id="side3" aria-label="Predisposições marcadas"></aside>
+  </div>
+</main>
+
+<!-- 4. indicação -->
+<main class="wrap res" id="s4" hidden>
+  <aside>
+    <div class="glass qbox" id="qbox4"></div>
+    <nav class="glass list" id="list4" aria-label="Protocolos indicados"></nav>
+  </aside>
+  <article class="doc" id="doc4" aria-live="polite"></article>
+</main>
+
+<div id="pdf-stage" aria-hidden="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="/genetica-regras.js"></script>
+<script src="/genetica-dados.js"></script>
+<script src="/conta.js" defer></script>
+<script>
+const ICONS = {"pill": "<path d=\"m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z\" /> <path d=\"m8.5 8.5 7 7\" />", "syringe": "<path d=\"m18 2 4 4\" /> <path d=\"m17 7 3-3\" /> <path d=\"M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5\" /> <path d=\"m9 11 4 4\" /> <path d=\"m5 19-3 3\" /> <path d=\"m14 4 6 6\" />", "flask-conical": "<path d=\"M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2\" /> <path d=\"M8.5 2h7\" /> <path d=\"M7 16h10\" />", "clock": "<circle cx=\"12\" cy=\"12\" r=\"10\" /> <polyline points=\"12 6 12 12 16 14\" />", "calendar-days": "<path d=\"M8 2v4\" /> <path d=\"M16 2v4\" /> <rect width=\"18\" height=\"18\" x=\"3\" y=\"4\" rx=\"2\" /> <path d=\"M3 10h18\" /> <path d=\"M8 14h.01\" /> <path d=\"M12 14h.01\" /> <path d=\"M16 14h.01\" /> <path d=\"M8 18h.01\" /> <path d=\"M12 18h.01\" /> <path d=\"M16 18h.01\" />", "stethoscope": "<path d=\"M11 2v2\" /> <path d=\"M5 2v2\" /> <path d=\"M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1\" /> <path d=\"M8 15a6 6 0 0 0 12 0v-3\" /> <circle cx=\"20\" cy=\"10\" r=\"2\" />", "activity": "<path d=\"M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2\" />", "heart-pulse": "<path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\" /> <path d=\"M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27\" />", "list-checks": "<path d=\"m3 17 2 2 4-4\" /> <path d=\"m3 7 2 2 4-4\" /> <path d=\"M13 6h8\" /> <path d=\"M13 12h8\" /> <path d=\"M13 18h8\" />", "triangle-alert": "<path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\" /> <path d=\"M12 9v4\" /> <path d=\"M12 17h.01\" />", "sparkles": "<path d=\"M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z\" /> <path d=\"M20 3v4\" /> <path d=\"M22 5h-4\" /> <path d=\"M4 17v2\" /> <path d=\"M5 18H3\" />", "leaf": "<path d=\"M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z\" /> <path d=\"M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12\" />", "droplet": "<path d=\"M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z\" />", "moon": "<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\" />", "dumbbell": "<path d=\"M14.4 14.4 9.6 9.6\" /> <path d=\"M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z\" /> <path d=\"m21.5 21.5-1.4-1.4\" /> <path d=\"M3.9 3.9 2.5 2.5\" /> <path d=\"M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z\" />", "brain": "<path d=\"M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z\" /> <path d=\"M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z\" /> <path d=\"M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4\" /> <path d=\"M17.599 6.5a3 3 0 0 0 .399-1.375\" /> <path d=\"M6.003 5.125A3 3 0 0 0 6.401 6.5\" /> <path d=\"M3.477 10.896a4 4 0 0 1 .585-.396\" /> <path d=\"M19.938 10.5a4 4 0 0 1 .585.396\" /> <path d=\"M6 18a4 4 0 0 1-1.967-.516\" /> <path d=\"M19.967 17.484A4 4 0 0 1 18 18\" />", "shield-plus": "<path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\" /> <path d=\"M9 12h6\" /> <path d=\"M12 9v6\" />", "scale": "<path d=\"m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\" /> <path d=\"m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z\" /> <path d=\"M7 21h10\" /> <path d=\"M12 3v18\" /> <path d=\"M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2\" />", "apple": "<path d=\"M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z\" /> <path d=\"M10 2c1 .5 2 2 2 5\" />", "salad": "<path d=\"M7 21h10\" /> <path d=\"M12 21a9 9 0 0 0 9-9H3a9 9 0 0 0 9 9Z\" /> <path d=\"M11.38 12a2.4 2.4 0 0 1-.4-4.77 2.4 2.4 0 0 1 3.2-2.77 2.4 2.4 0 0 1 3.47-.63 2.4 2.4 0 0 1 3.37 3.37 2.4 2.4 0 0 1-1.1 3.7 2.51 2.51 0 0 1 .03 1.1\" /> <path d=\"m13 12 4-4\" /> <path d=\"M10.9 7.25A3.99 3.99 0 0 0 4 10c0 .73.2 1.41.54 2\" />", "sun": "<circle cx=\"12\" cy=\"12\" r=\"4\" /> <path d=\"M12 2v2\" /> <path d=\"M12 20v2\" /> <path d=\"m4.93 4.93 1.41 1.41\" /> <path d=\"m17.66 17.66 1.41 1.41\" /> <path d=\"M2 12h2\" /> <path d=\"M20 12h2\" /> <path d=\"m6.34 17.66-1.41 1.41\" /> <path d=\"m19.07 4.93-1.41 1.41\" />", "sun-moon": "<path d=\"M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4\" /> <path d=\"M12 2v2\" /> <path d=\"M12 20v2\" /> <path d=\"m4.9 4.9 1.4 1.4\" /> <path d=\"m17.7 17.7 1.4 1.4\" /> <path d=\"M2 12h2\" /> <path d=\"M20 12h2\" /> <path d=\"m6.3 17.7-1.4 1.4\" /> <path d=\"m19.1 4.9-1.4 1.4\" />", "user-round": "<circle cx=\"12\" cy=\"8\" r=\"5\" /> <path d=\"M20 21a8 8 0 0 0-16 0\" />", "clipboard-list": "<rect width=\"8\" height=\"4\" x=\"8\" y=\"2\" rx=\"1\" ry=\"1\" /> <path d=\"M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2\" /> <path d=\"M12 11h4\" /> <path d=\"M12 16h4\" /> <path d=\"M8 11h.01\" /> <path d=\"M8 16h.01\" />", "layers": "<path d=\"m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z\" /> <path d=\"m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65\" /> <path d=\"m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65\" />", "search": "<circle cx=\"11\" cy=\"11\" r=\"8\" /> <path d=\"m21 21-4.3-4.3\" />", "download": "<path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\" /> <polyline points=\"7 10 12 15 17 10\" /> <line x1=\"12\" x2=\"12\" y1=\"15\" y2=\"3\" />", "target": "<circle cx=\"12\" cy=\"12\" r=\"10\" /> <circle cx=\"12\" cy=\"12\" r=\"6\" /> <circle cx=\"12\" cy=\"12\" r=\"2\" />", "route": "<circle cx=\"6\" cy=\"19\" r=\"3\" /> <path d=\"M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15\" /> <circle cx=\"18\" cy=\"5\" r=\"3\" />", "info": "<circle cx=\"12\" cy=\"12\" r=\"10\" /> <path d=\"M12 16v-4\" /> <path d=\"M12 8h.01\" />", "heart": "<path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\" />", "footprints": "<path d=\"M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z\" /> <path d=\"M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z\" /> <path d=\"M16 17h4\" /> <path d=\"M4 13h4\" />", "ruler": "<path d=\"M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z\" /> <path d=\"m14.5 12.5 2-2\" /> <path d=\"m11.5 9.5 2-2\" /> <path d=\"m8.5 6.5 2-2\" /> <path d=\"m17.5 15.5 2-2\" />", "flame": "<path d=\"M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z\" />", "scan-face": "<path d=\"M3 7V5a2 2 0 0 1 2-2h2\" /> <path d=\"M17 3h2a2 2 0 0 1 2 2v2\" /> <path d=\"M21 17v2a2 2 0 0 1-2 2h-2\" /> <path d=\"M7 21H5a2 2 0 0 1-2-2v-2\" /> <path d=\"M8 14s1.5 2 4 2 4-2 4-2\" /> <path d=\"M9 9h.01\" /> <path d=\"M15 9h.01\" />", "microscope": "<path d=\"M6 18h8\" /> <path d=\"M3 22h18\" /> <path d=\"M14 22a7 7 0 1 0 0-14h-1\" /> <path d=\"M9 14h2\" /> <path d=\"M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z\" /> <path d=\"M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3\" />", "zap": "<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\" />", "circle-check-big": "<path d=\"M21.801 10A10 10 0 1 1 17 3.335\" /> <path d=\"m9 11 3 3L22 4\" />", "cigarette-off": "<path d=\"M12 12H3a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h13\" /> <path d=\"M18 8c0-2.5-2-2.5-2-5\" /> <path d=\"m2 2 20 20\" /> <path d=\"M21 12a1 1 0 0 1 1 1v2a1 1 0 0 1-.5.866\" /> <path d=\"M22 8c0-2.5-2-2.5-2-5\" /> <path d=\"M7 12v4\" />", "wine-off": "<path d=\"M8 22h8\" /> <path d=\"M7 10h3m7 0h-1.343\" /> <path d=\"M12 15v7\" /> <path d=\"M7.307 7.307A12.33 12.33 0 0 0 7 10a5 5 0 0 0 7.391 4.391M8.638 2.981C8.75 2.668 8.872 2.34 9 2h6c1.5 4 2 6 2 8 0 .407-.05.809-.145 1.198\" /> <line x1=\"2\" x2=\"22\" y1=\"2\" y2=\"22\" />", "baby": "<path d=\"M9 12h.01\" /> <path d=\"M15 12h.01\" /> <path d=\"M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5\" /> <path d=\"M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.5 1.1 3.5 2.5s-.9 2.5-2 2.5c-.8 0-1.5-.4-1.5-1\" />", "bed": "<path d=\"M2 4v16\" /> <path d=\"M2 8h18a2 2 0 0 1 2 2v10\" /> <path d=\"M2 17h20\" /> <path d=\"M6 8v9\" />", "glass-water": "<path d=\"M5.116 4.104A1 1 0 0 1 6.11 3h11.78a1 1 0 0 1 .994 1.105L17.19 20.21A2 2 0 0 1 15.2 22H8.8a2 2 0 0 1-2-1.79z\" /> <path d=\"M6 12a5 5 0 0 1 6 0 5 5 0 0 0 6 0\" />", "utensils": "<path d=\"M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2\" /> <path d=\"M7 2v20\" /> <path d=\"M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7\" />", "bike": "<circle cx=\"18.5\" cy=\"17.5\" r=\"3.5\" /> <circle cx=\"5.5\" cy=\"17.5\" r=\"3.5\" /> <circle cx=\"15\" cy=\"5\" r=\"1\" /> <path d=\"M12 17.5V14l-3-3 4-3 2 3h2\" />", "book-open": "<path d=\"M12 7v14\" /> <path d=\"M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z\" />", "smile": "<circle cx=\"12\" cy=\"12\" r=\"10\" /> <path d=\"M8 14s1.5 2 4 2 4-2 4-2\" /> <line x1=\"9\" x2=\"9.01\" y1=\"9\" y2=\"9\" /> <line x1=\"15\" x2=\"15.01\" y1=\"9\" y2=\"9\" />", "hand-heart": "<path d=\"M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16\" /> <path d=\"m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9\" /> <path d=\"m2 15 6 6\" /> <path d=\"M19.5 8.5c.7-.7 1.5-1.6 1.5-2.7A2.73 2.73 0 0 0 16 4a2.78 2.78 0 0 0-5 1.8c0 1.2.8 2 1.5 2.8L16 12Z\" />", "ban": "<circle cx=\"12\" cy=\"12\" r=\"10\" /> <path d=\"m4.9 4.9 14.2 14.2\" />", "droplets": "<path d=\"M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z\" /> <path d=\"M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97\" />", "wind": "<path d=\"M12.8 19.6A2 2 0 1 0 14 16H2\" /> <path d=\"M17.5 8a2.5 2.5 0 1 1 2 4H2\" /> <path d=\"M9.8 4.4A2 2 0 1 1 11 8H2\" />", "trending-down": "<polyline points=\"22 17 13.5 8.5 8.5 13.5 2 7\" /> <polyline points=\"16 17 22 17 22 11\" />", "scissors": "<circle cx=\"6\" cy=\"6\" r=\"3\" /> <path d=\"M8.12 8.12 12 12\" /> <path d=\"M20 4 8.12 15.88\" /> <circle cx=\"6\" cy=\"18\" r=\"3\" /> <path d=\"M14.8 14.8 20 20\" />", "waves": "<path d=\"M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1\" /> <path d=\"M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1\" /> <path d=\"M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1\" />", "person-standing": "<circle cx=\"12\" cy=\"5\" r=\"1\" /> <path d=\"m9 20 3-6 3 6\" /> <path d=\"m6 8 6 2 6-2\" /> <path d=\"M12 10v4\" />", "hospital": "<path d=\"M12 6v4\" /> <path d=\"M14 14h-4\" /> <path d=\"M14 18h-4\" /> <path d=\"M14 8h-4\" /> <path d=\"M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2\" /> <path d=\"M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18\" />", "refrigerator": "<path d=\"M5 6a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6Z\" /> <path d=\"M5 10h14\" /> <path d=\"M15 7v6\" />", "milestone": "<path d=\"M12 13v8\" /> <path d=\"M12 3v3\" /> <path d=\"M4 6a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h13a2 2 0 0 0 1.152-.365l3.424-2.317a1 1 0 0 0 0-1.635l-3.424-2.318A2 2 0 0 0 17 6z\" />", "thermometer": "<path d=\"M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z\" />", "dna": "<path d=\"m10 16 1.5 1.5\"/><path d=\"m14 8-1.5-1.5\"/><path d=\"M15 2c-1.798 1.998-2.518 3.995-2.807 5.993\"/><path d=\"m16.5 10.5 1 1\"/><path d=\"m17 6-2.891-2.891\"/><path d=\"M2 15c6.667-6 13.333 0 20-6\"/><path d=\"m20 9 .891.891\"/><path d=\"M3.109 14.109 4 15\"/><path d=\"m6.5 12.5 1 1\"/><path d=\"m7 18 2.891 2.891\"/><path d=\"M9 22c1.798-1.998 2.518-3.995 2.807-5.993\"/>", "file-text": "<path d=\"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z\"/><path d=\"M14 2v4a2 2 0 0 0 2 2h4\"/><path d=\"M10 9H8\"/><path d=\"M16 13H8\"/><path d=\"M16 17H8\"/>", "x": "<path d=\"M18 6 6 18\"/><path d=\"m6 6 12 12\"/>", "arrow-right": "<path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/>", "arrow-left": "<path d=\"m12 19-7-7 7-7\"/><path d=\"M19 12H5\"/>", "check": "<path d=\"M20 6 9 17l-5-5\"/>", "rotate-ccw": "<path d=\"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8\"/><path d=\"M3 3v5h5\"/>", "lock": "<rect width=\"18\" height=\"11\" x=\"3\" y=\"11\" rx=\"2\" ry=\"2\"/><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"/>"};
+const PROTOS = [{"id": "pes", "nome": "PES 90", "via": "EV · SC · IM", "duracao": "30, 60 ou 90 dias", "demandas": ["emagrecimento"], "ativos": [{"n": "Cafeína", "d": "50mg", "v": "", "t": "cafeina "}, {"n": "Carnitina", "d": "600mg", "v": "", "t": "carnitina "}, {"n": "Pentoxifilina", "d": "40mg", "v": "", "t": "pentoxifilina "}, {"n": "Inositol", "d": "150mg", "v": "", "t": "inositol "}, {"n": "Lidocaína", "d": "20mg", "v": "", "t": "lidocaina "}, {"n": "Metionina", "d": "100mg", "v": "", "t": "metionina "}, {"n": "Cloreto de Colina", "d": "150mg", "v": "", "t": "cloreto de colina "}, {"n": "Vitamina B6", "d": "100mg", "v": "", "t": "vitamina b6 "}, {"n": "Metilcobalamina", "d": "500mcg", "v": "", "t": "metilcobalamina "}]}, {"id": "mounjaro", "nome": "Mounjaro", "via": "Orientação ao paciente", "duracao": "Durante o tratamento", "demandas": ["glp1", "emagrecimento"], "ativos": [{"n": "Vonau Flash", "d": "8mg", "v": "Náuseas e vômitos", "t": "vonau flash "}, {"n": "Tiorfan", "d": "100mg", "v": "Diarreia", "t": "tiorfan "}, {"n": "Almeida Prado 46", "d": "1 comprimido", "v": "Constipação", "t": "almeida prado 46 "}]}, {"id": "lipopro", "nome": "Enzima LipoPro", "via": "SC · ID", "duracao": "60 dias", "demandas": ["gordura", "emagrecimento"], "ativos": [{"n": "Desoxicolato de Sódio", "d": "60mg/2mL", "v": "SC", "t": "desoxicolato de sodio "}, {"n": "Cafeína Benzoica", "d": "100mg/2mL", "v": "SC", "t": "cafeina benzoica "}, {"n": "L-Carnitina", "d": "600mg/2mL", "v": "SC", "t": "l-carnitina "}, {"n": "Tripeptídeo-41", "d": "24mg/2mL", "v": "SC", "t": "tripeptideo-41 "}, {"n": "Lidocaína", "d": "20mg/1mL", "v": "SC", "t": "lidocaina "}, {"n": "Trissilinol", "d": "10mg/2mL", "v": "ID", "t": "trissilinol "}, {"n": "Ácido Lipoico", "d": "10mg/2mL", "v": "ID", "t": "acido lipoico "}, {"n": "DMAE", "d": "60mg/2mL", "v": "ID", "t": "dmae "}, {"n": "Melatonina", "d": "3mg/2mL", "v": "ID", "t": "melatonina "}, {"n": "Lidocaína", "d": "20mg/1mL", "v": "ID", "t": "lidocaina "}]}, {"id": "renovaskin", "nome": "RenovaSkin 60D", "via": "SC", "duracao": "60 dias", "demandas": ["pele", "gordura"], "ativos": [{"n": "DMAE (Dimetilaminoetanol)", "d": "", "v": "SC", "t": "dmae (dimetilaminoetanol) "}, {"n": "Tripeptídeo-41", "d": "", "v": "SC", "t": "tripeptideo-41 "}]}, {"id": "lipedema", "nome": "Você Livre", "via": "EV", "duracao": "8 semanas", "demandas": ["lipedema"], "ativos": [{"n": "Ácido Alfa Lipoico", "d": "600mg", "v": "EV", "t": "acido alfa lipoico "}, {"n": "L-Carnitina (30%)", "d": "600mg/2mL", "v": "EV", "t": "l-carnitina (30%) "}, {"n": "SAMe (S-Adenosil-L-Metionina) (10%)", "d": "200mg/2mL", "v": "EV", "t": "same (s-adenosil-l-metionina) (10%) "}, {"n": "L-Arginina (50%)", "d": "1g/2mL", "v": "EV", "t": "l-arginina (50%) "}, {"n": "L-Citrulina (2%)", "d": "200mg", "v": "EV", "t": "l-citrulina (2%) "}, {"n": "ATP (Adenosina Trifosfato)", "d": "20mg/2mL", "v": "EV", "t": "atp (adenosina trifosfato) "}, {"n": "Vitamina C (Ácido Ascórbico) (20%)", "d": "1g/5mL", "v": "EV", "t": "vitamina c (acido ascorbico) (20%) "}]}, {"id": "metamuscle", "nome": "MetaMuscle", "via": "EV", "duracao": "60 dias", "demandas": ["hipertrofia"], "ativos": [{"n": "HMB (Hidroximetilbutirato) (2,5%)", "d": "50mg/2mL", "v": "EV", "t": "hmb (hidroximetilbutirato) (2,5%) "}, {"n": "L-Carnitina (30%)", "d": "600mg/2mL", "v": "EV", "t": "l-carnitina (30%) "}, {"n": "L-Leucina (1,5%)", "d": "150mg/10mL", "v": "EV", "t": "l-leucina (1,5%) "}, {"n": "L-Ornitina (15%)", "d": "300mg/2mL", "v": "EV", "t": "l-ornitina (15%) "}, {"n": "Pool de Minerais (com Zinco)", "d": "2mL", "v": "EV", "t": "pool de minerais (com zinco) "}, {"n": "Pool de Aminoácidos Essenciais (5,56%)", "d": "10mL", "v": "EV", "t": "pool de aminoacidos essenciais (5,56%) "}, {"n": "L-Glutationa (5%)", "d": "100mg/2mL", "v": "EV", "t": "l-glutationa (5%) "}]}, {"id": "performance", "nome": "Performance Plus", "via": "EV", "duracao": "60 dias", "demandas": ["performance", "hipertrofia"], "ativos": [{"n": "L-Carnitina", "d": "", "v": "EV", "t": "l-carnitina "}, {"n": "Vitamina B5 (D-Pantenol)", "d": "", "v": "EV", "t": "vitamina b5 (d-pantenol) "}, {"n": "Sulfato de Magnésio", "d": "", "v": "EV", "t": "sulfato de magnesio "}, {"n": "D-Ribose", "d": "", "v": "EV", "t": "d-ribose "}, {"n": "Vitamina B3 (Nicotinamida)", "d": "", "v": "EV", "t": "vitamina b3 (nicotinamida) "}, {"n": "Vitamina B2 (Riboflavina)", "d": "", "v": "EV", "t": "vitamina b2 (riboflavina) "}, {"n": "PQQ (Pirroloquinolina Quinona)", "d": "", "v": "EV", "t": "pqq (pirroloquinolina quinona) "}, {"n": "HMB (Hidroximetilbutirato de cálcio)", "d": "", "v": "EV", "t": "hmb (hidroximetilbutirato de calcio) "}, {"n": "Coenzima Q10", "d": "", "v": "", "t": "coenzima q10 "}]}, {"id": "everest", "nome": "Everest 60", "via": "EV", "duracao": "60 dias", "demandas": ["cognicao"], "ativos": [{"n": "Alfa-GPC", "d": "", "v": "EV", "t": "alfa-gpc "}, {"n": "Piracetam", "d": "", "v": "EV", "t": "piracetam "}, {"n": "L-Theanina", "d": "", "v": "EV", "t": "l-theanina "}, {"n": "Inositol + L-Taurina", "d": "", "v": "EV", "t": "inositol + l-taurina "}, {"n": "L-Fenilalanina", "d": "", "v": "EV", "t": "l-fenilalanina "}, {"n": "ATP", "d": "", "v": "EV", "t": "atp "}, {"n": "Pool de Aminoácidos", "d": "", "v": "EV", "t": "pool de aminoacidos "}, {"n": "Colina + L-Carnitina + D-Pantenol", "d": "", "v": "EV", "t": "colina + l-carnitina + d-pantenol "}]}, {"id": "antiaging", "nome": "Anti Aging", "via": "EV", "duracao": "60 dias", "demandas": ["longevidade", "cognicao"], "ativos": [{"n": "Citicolina (25%)", "d": "250mg/1mL", "v": "EV", "t": "citicolina (25%) "}, {"n": "NMN (β-Mononucleotídeo de Nicotinamida) (10%)", "d": "100mg/1mL", "v": "EV", "t": "nmn (β-mononucleotideo de nicotinamida) (10%) "}, {"n": "PQQ (Pirroloquinolina Quinona) (0,25%)", "d": "2,5mg/1mL", "v": "EV", "t": "pqq (pirroloquinolina quinona) (0,25%) "}, {"n": "Alfa-GPC (98% de GPC) (15%)", "d": "150mg/1mL", "v": "EV", "t": "alfa-gpc (98% de gpc) (15%) "}]}, {"id": "imunidade", "nome": "Imunidade Pro", "via": "EV · IM", "duracao": "30 dias", "demandas": ["imunidade"], "ativos": [{"n": "Complexo B", "d": "", "v": "EV", "t": "complexo b vitamina b2 (riboflavina) vitamina b3 (nicotinamida) vitamina b5 (d-pantenol) vitamina b6 (piridoxina hcl)"}, {"n": "N-Acetil Cisteína (NAC)", "d": "300mg", "v": "EV", "t": "n-acetil cisteina (nac) "}, {"n": "Pool de Minerais", "d": "por 2mL", "v": "EV", "t": "pool de minerais cloreto de cromo sulfato de manganes sulfato de magnesio sulfato de zinco selenio sulfato de cobre"}, {"n": "L-Glutationa", "d": "100mg", "v": "EV", "t": "l-glutationa "}, {"n": "Alanil Glutamina", "d": "120mg", "v": "EV", "t": "alanil glutamina "}, {"n": "Coenzima Q10", "d": "50mg", "v": "IM", "t": "coenzima q10 "}]}, {"id": "revitalize", "nome": "ReVitalize Cabelos", "via": "ID · EV", "duracao": "60 dias", "demandas": ["cabelos"], "ativos": [{"n": "Biotina (Vitamina B7)", "d": "", "v": "ID", "t": "biotina (vitamina b7) "}, {"n": "Vitamina B5 (D-Pantenol)", "d": "", "v": "ID", "t": "vitamina b5 (d-pantenol) "}, {"n": "Lidocaína Cloridrato", "d": "", "v": "ID", "t": "lidocaina cloridrato "}, {"n": "Minoxidil", "d": "", "v": "ID", "t": "minoxidil "}, {"n": "IGF, bFGF, VEGF e Copper Peptídeo", "d": "", "v": "ID", "t": "igf, bfgf, vegf e copper peptideo "}, {"n": "Pool de Minerais", "d": "", "v": "EV", "t": "pool de minerais "}, {"n": "Vitamina B5 (D-Pantenol)", "d": "", "v": "EV", "t": "vitamina b5 (d-pantenol) "}, {"n": "Complexo B (exceto B1)", "d": "", "v": "EV", "t": "complexo b (exceto b1) "}, {"n": "L-Metionina", "d": "", "v": "EV", "t": "l-metionina "}, {"n": "N-Acetil Cisteína", "d": "", "v": "EV", "t": "n-acetil cisteina "}, {"n": "MSM (Metilsulfonilmetano)", "d": "", "v": "EV", "t": "msm (metilsulfonilmetano) "}, {"n": "Aminoácidos", "d": "", "v": "EV", "t": "aminoacidos "}]}, {"id": "bariBalance", "nome": "BariBalance", "via": "EV", "duracao": "60 dias", "demandas": ["bariatrica"], "ativos": [{"n": "Complexo B (sem B1)", "d": "2mL", "v": "EV", "t": "complexo b (sem b1) "}, {"n": "Pool de Minerais (com Zinco)", "d": "2mL", "v": "EV", "t": "pool de minerais (com zinco) "}, {"n": "N-Acetil Cisteína (15%)", "d": "300mg/2mL", "v": "EV", "t": "n-acetil cisteina (15%) "}, {"n": "MSM (Metilsulfonilmetano) (15%)", "d": "750mg/5mL", "v": "EV", "t": "msm (metilsulfonilmetano) (15%) "}, {"n": "Inositol (10%)", "d": "1g/10mL", "v": "EV", "t": "inositol (10%) "}, {"n": "L-Triptofano (1%)", "d": "100mg/10mL", "v": "EV", "t": "l-triptofano (1%) "}, {"n": "Pool de Aminoácidos (3,8%)", "d": "10mL", "v": "EV", "t": "pool de aminoacidos (3,8%) "}, {"n": "HMB (Hidroximetilbutirato) (2,5%)", "d": "50mg/2mL", "v": "EV", "t": "hmb (hidroximetilbutirato) (2,5%) "}, {"n": "L-Fenilalanina (1%)", "d": "50mg/5mL", "v": "EV", "t": "l-fenilalanina (1%) "}, {"n": "Vitamina B12 (Metilcobalamina) (0,25%)", "d": "2500mcg/1mL", "v": "EV", "t": "vitamina b12 (metilcobalamina) (0,25%) "}]}];
+const DEMANDAS = [{"id": "emagrecimento", "nome": "Emagrecimento"}, {"id": "gordura", "nome": "Gordura localizada e flacidez"}, {"id": "lipedema", "nome": "Lipedema"}, {"id": "hipertrofia", "nome": "Hipertrofia e composição corporal"}, {"id": "performance", "nome": "Performance esportiva"}, {"id": "cognicao", "nome": "Cognição e memória"}, {"id": "longevidade", "nome": "Longevidade e anti-aging"}, {"id": "imunidade", "nome": "Imunidade"}, {"id": "cabelos", "nome": "Queda capilar"}, {"id": "pele", "nome": "Pele e rejuvenescimento"}, {"id": "bariatrica", "nome": "Reposição pós-bariátrica"}, {"id": "glp1", "nome": "Efeitos colaterais de GLP-1"}];
+</script>
+<script>
+(function(){
+const { PREDS, GENES, ATIVOS, TECS, TEC_PAPEL, OBJETIVOS } = window.REGRAS;
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const I = n => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n] || ICONS.leaf}</svg>`;
+const P = (n, c = "#3ee08f", z = 14) => `<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ICONS.leaf}</svg>`;
+const T = (n, sm) => `<span class="tile${sm ? " sm" : ""}">${I(n)}</span>`;
+const N = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+const PICON = {pes:"scale",mounjaro:"syringe",lipopro:"target",renovaskin:"scan-face",lipedema:"footprints",metamuscle:"dumbbell",performance:"activity",everest:"brain",antiaging:"sparkles",imunidade:"shield-plus",revitalize:"scissors",bariBalance:"utensils"};
+const DICON = {emagrecimento:"scale",gordura:"target",lipedema:"footprints",hipertrofia:"dumbbell",performance:"activity",cognicao:"brain",longevidade:"sparkles",imunidade:"shield-plus",cabelos:"scissors",pele:"scan-face",bariatrica:"utensils",glp1:"syringe"};
+const byId = Object.fromEntries(PROTOS.map(p => [p.id, p]));
+const PRED = Object.fromEntries(PREDS.map(p => [p.id, p]));
+const DNOME = Object.fromEntries(DEMANDAS.map(d => [d.id, d.nome]));
+
+const st = { arquivos: [], sexo: "", obj: new Set(), texto: "", genes: [], termos: {}, ativos: [], manual: new Set(), off: new Set(), inj: null, prot: new Set(), tec: new Set(), maxPasso: 1, passo: 1, escolha: null, vistos: new Set(), nomes: [] };
+document.querySelectorAll("[data-i]").forEach(el => { el.outerHTML = I(el.dataset.i); });
+
+/* tema */
+const modeBtn = $("mode");
+function curTheme(){ const t = document.documentElement.getAttribute("data-theme"); return t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); }
+function paintMode(){ modeBtn.innerHTML = I(curTheme() === "dark" ? "sun" : "moon"); }
+try { const t = localStorage.getItem("hp-theme"); if (t) document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+paintMode();
+modeBtn.addEventListener("click", () => { const n = curTheme() === "dark" ? "light" : "dark"; document.documentElement.setAttribute("data-theme", n); try { localStorage.setItem("hp-theme", n); } catch (e) {} paintMode(); });
+
+/* navegação */
+const VIEWS = ["s1", "s2", "s3", "s4"];
+function go(n){
+  if (n > st.maxPasso) return;
+  st.passo = n;
+  VIEWS.forEach((v, i) => $(v).hidden = i + 1 !== n);
+  document.querySelectorAll(".steps button").forEach(b => { const k = +b.dataset.step; b.setAttribute("aria-current", k === n); b.disabled = k > st.maxPasso; b.classList.toggle("ok", k < st.maxPasso && k !== n); });
+  window.scrollTo({ top: 0 });
+}
+document.querySelectorAll(".steps button").forEach(b => b.addEventListener("click", () => go(+b.dataset.step)));
+document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(+b.dataset.go)));
+function showErr(id, msg){ $(id).innerHTML = msg ? `<div class="err">${I("triangle-alert")}<span>${esc(msg)}</span></div>` : ""; }
+
+/* ===== etapa 1 ===== */
+$("obj").innerHTML = DEMANDAS.map(d => `<button type="button" data-v="${d.id}" aria-pressed="false">${I(DICON[d.id] || "leaf")}${esc(d.nome)}</button>`).join("");
+$("obj").querySelectorAll("button").forEach(b => b.addEventListener("click", () => { const v = b.dataset.v; st.obj.has(v) ? st.obj.delete(v) : st.obj.add(v); b.setAttribute("aria-pressed", st.obj.has(v)); }));
+$("sexo").querySelectorAll("button").forEach(b => b.addEventListener("click", () => { st.sexo = st.sexo === b.dataset.v ? "" : b.dataset.v; $("sexo").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x.dataset.v === st.sexo)); }));
+const drop = $("drop"), fileIn = $("file");
+["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => addFiles(e.dataTransfer.files));
+fileIn.addEventListener("change", () => { addFiles(fileIn.files); fileIn.value = ""; });
+function addFiles(list){
+  showErr("err1", "");
+  for (const f of list){
+    if (!(f.type === "application/pdf" || /\.(pdf|txt)$/i.test(f.name))) { showErr("err1", `O arquivo ${f.name} não é PDF.`); continue; }
+    st.arquivos.push(f);
+  }
+  paintFiles();
+}
+function kb(n){ return n > 1048576 ? (n / 1048576).toFixed(1).replace(".", ",") + " MB" : Math.max(1, Math.round(n / 1024)) + " KB"; }
+function paintFiles(){
+  $("files").innerHTML = (st.arquivos.length || !st.nomes.length ? "" : `<div class="file">${T("file-text", true)}<div class="meta"><b>${esc(st.nomes.join(", "))}</b><small>Último laudo lido</small></div></div>`) + st.arquivos.map((f, i) => `<div class="file">${T("file-text", true)}<div class="meta"><b>${esc(f.name)}</b><small>${kb(f.size)}</small></div><button class="xb" type="button" data-rm="${i}" aria-label="Remover ${esc(f.name)}">${I("x")}</button></div>`).join("");
+  $("files").querySelectorAll("[data-rm]").forEach(b => b.addEventListener("click", () => { st.arquivos.splice(+b.dataset.rm, 1); paintFiles(); }));
+  check1();
+}
+$("texto").addEventListener("input", check1);
+function check1(){ $("ler").disabled = !(st.arquivos.length || $("texto").value.trim().length >= 20); }
+
+async function textoDoPdf(f){
+  if (/\.txt$/i.test(f.name)) return await f.text();
+  if (!window.pdfjsLib) throw new Error("O leitor de PDF não carregou. Recarregue a página ou cole o texto do laudo.");
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  const doc = await pdfjsLib.getDocument({ data: await f.arrayBuffer() }).promise;
+  let out = "";
+  for (let i = 1; i <= doc.numPages; i++){
+    const tc = await (await doc.getPage(i)).getTextContent();
+    let linha = "", lastY = null, lastX = null;
+    tc.items.forEach(it => {
+      const y = Math.round(it.transform[5]), x = it.transform[4];
+      if (lastY !== null && Math.abs(y - lastY) > 3) { out += linha.replace(/\s+/g, " ").trim() + "\n"; linha = ""; }
+      else if (lastX !== null && x - lastX > 12) linha += "  ";
+      linha += it.str; lastY = y; lastX = x + (it.width || 0);
+    });
+    out += linha.replace(/\s+/g, " ").trim() + "\n\n";
+  }
+  return out;
+}
+
+/* ===== leitura do laudo (sem IA) ===== */
+const ALT = /(risco (aumentado|elevado|alto|moderado|intermediario|maior)|alto risco|desfavoravel|alterad|variante (presente|detectada|identificada)|presenca d[ae] (variante|mutacao|alelo)|mutad|heterozigot|homozigot[oa]? (mutad|varian|de risco|para (o )?alelo (de risco|mutad|variante))|metabolizador (lento|intermediario|pobre|ultra)|\blent[oa]\b|reduzid|diminuid|deletad|\bnulo\b|positivo|predisposicao (aumentada|alta|elevada|moderada)|baixa (atividade|eficiencia|capacidade|funcao)|menor (atividade|eficiencia|capacidade|funcao)|maior (risco|tendencia|propensao)|atencao|portador)/;
+const NOR = /(normal|favoravel|sem alterac|nao alterad|risco (baixo|habitual|reduzido|menor|basal|populacional)|baixo risco|selvagem|wild|nao (detectad|identificad|encontrad|portador)|negativo|ausencia de (variante|mutacao|alelo)|metabolizador (rapido|normal|extensivo)|\brapid[oa]\b|tipico|esperado)/;
+const ALTO = /(alto risco|risco (elevado|alto)|homozigot|impacto alto|predisposicao (alta|elevada))/;
+const COMP = { A: "T", T: "A", C: "G", G: "C" };
+const geneRe = GENES.map(g => ({ g, re: new RegExp(`(^|[^A-Za-z0-9])(${[g.g, ...(g.alias || []), ...Object.keys(g.rs)].map(x => x.replace(/[.*+?^${}()|[\]\\-]/g, "\\$&")).join("|")})(?![A-Za-z0-9])`, "g") }));
+const qualquerGene = new RegExp(`(^|[^A-Za-z0-9])(${GENES.flatMap(g => [g.g, ...Object.keys(g.rs)]).map(x => x.replace(/[.*+?^${}()|[\]\\-]/g, "\\$&")).join("|")})(?![A-Za-z0-9])`);
+
+function genotipoEm(w){
+  let m = w.match(/(?:^|[^A-Za-z0-9])([ACGT])\s*[\/|;]\s*([ACGT])(?![A-Za-z0-9])/) || w.match(/(?:^|[^A-Za-z0-9>\-])([ACGT])([ACGT])(?![A-Za-z0-9])/);
+  return m ? m[1] + m[2] : "";
+}
+function contaRisco(gt, par){
+  if (!gt || !par) return null;
+  let [r, ref] = par; let a = gt.split("");
+  if (!a.every(x => x === r || x === ref)) { a = a.map(x => COMP[x]); if (!a.every(x => x === r || x === ref)) return null; }
+  return a.filter(x => x === r).length;
+}
+function analisar(texto){
+  const achados = [];
+  geneRe.forEach(({ g, re }) => {
+    re.lastIndex = 0; let m; const porRs = {};
+    while ((m = re.exec(texto))){
+      const ini = m.index + m[1].length, fim = ini + m[2].length;
+      let w = texto.slice(fim, fim + 260);
+      const prox = w.slice(3).search(qualquerGene); if (prox > 0) w = w.slice(0, prox + 3);
+      const linhaIni = texto.lastIndexOf("\n", ini) + 1;
+      const trecho = (texto.slice(linhaIni, ini) + texto.slice(ini, fim) + w).replace(/\s+/g, " ").trim().slice(0, 160);
+      const wn = N(w);
+      const ia = wn.search(ALT), inn = wn.search(NOR);
+      let status = "", alto = false;
+      if (ia >= 0 && (inn < 0 || ia < inn)) { status = "alterado"; alto = ALTO.test(wn); }
+      else if (inn >= 0) status = "normal";
+      const rsAqui = (w.match(/rs\d{3,}/i) || [m[2].match(/^rs\d+$/i) ? m[2] : ""])[0];
+      let gt = genotipoEm(w);
+      if (g.especial === "actn3") { const k = w.match(/(?:^|[^A-Za-z0-9])([RX])\s*\/?\s*([RX])(?![A-Za-z0-9])/); if (k) gt = k[1] + k[2]; }
+      if (g.especial === "ace") { const k = w.match(/(?:^|[^A-Za-z0-9])([DI])\s*\/?\s*([DI])(?![A-Za-z0-9])/); if (k) gt = k[1] + k[2]; }
+      if (g.especial === "apoe") { const k = w.match(/[eεE]\s?([234])\s*\/\s*[eεE]?\s?([234])/); if (k) gt = "ε" + k[1] + "/ε" + k[2]; }
+      if (!status && gt){
+        if (g.especial === "actn3") status = "alterado";
+        else if (g.especial === "ace") status = "alterado";
+        else if (g.especial === "apoe") { status = /4/.test(gt) ? "alterado" : "normal"; alto = /4.*4/.test(gt); }
+        else {
+          const pares = rsAqui && g.rs[rsAqui.toLowerCase()] ? [g.rs[rsAqui.toLowerCase()]] : Object.values(g.rs);
+          for (const par of pares){ const c = contaRisco(gt, par); if (c !== null) { status = c > 0 ? "alterado" : "normal"; alto = c === 2; break; } }
+        }
+      }
+      if (g.especial === "delecao" && !status) { if (/deletad|nulo|ausente|0\/0/.test(wn)) status = "alterado"; else if (/presente/.test(wn)) status = "normal"; }
+      const pontos = (status ? 2 : 0) + (gt ? 1 : 0) + (rsAqui ? 1 : 0);
+      if (g.estrito && !pontos) continue;
+      const k = (rsAqui || "").toLowerCase();
+      if (!porRs[k] || pontos > porRs[k].pontos) porRs[k] = { pontos, status, alto, gt, rs: rsAqui || "", trecho };
+    }
+    if (Object.keys(porRs).length > 1 && porRs[""] && porRs[""].pontos <= 1) delete porRs[""];
+    for (const melhor of Object.values(porRs)){
+      let pred = g.pred;
+      if (g.especial === "actn3" && /^(XX|TT|AA)$/.test(melhor.gt)) pred = "resistencia";
+      if (g.especial === "ace" && melhor.gt === "II") pred = "resistencia";
+      achados.push({ key: g.g + (melhor.rs ? " " + melhor.rs : ""), gene: g.g, pred, status: melhor.status || "indefinido", alto: melhor.alto, gt: melhor.gt, rs: melhor.rs, trecho: melhor.trecho });
+    }
+  });
+  const tn = N(texto);
+  const termos = {};
+  PREDS.forEach(p => (p.termos || []).forEach(re => { const m = tn.match(re); if (m) { const i = m.index; termos[p.id] = texto.slice(Math.max(0, i - 40), i + m[0].length + 60).replace(/\s+/g, " ").trim(); } }));
+  const ativos = ATIVOS.filter(([, re]) => re.test(tn)).map(([nome, , pr]) => ({ nome, protos: PROTOS.filter(p => p.ativos.some(a => pr.test(a.t))).map(p => p.id) }));
+  return { achados, termos, ativos };
+}
+
+$("ler").addEventListener("click", async () => {
+  showErr("err1", "");
+  const btn = $("ler"); btn.disabled = true;
+  try {
+    let texto = "";
+    for (const f of st.arquivos) texto += (await textoDoPdf(f)) + "\n";
+    texto += $("texto").value;
+    if (texto.replace(/\s+/g, "").length < 40) throw new Error("Não encontrei texto neste PDF. Ele parece escaneado: cole o texto do laudo ou marque as predisposições à mão na próxima etapa.");
+    st.texto = texto;
+    const r = analisar(texto);
+    st.genes = r.achados; st.termos = r.termos; st.ativos = r.ativos; st.off.clear(); st.manual.clear(); st.escolha = null; st.vistos.clear(); st.nomes = st.arquivos.map(f => f.name);
+    st.maxPasso = Math.max(st.maxPasso, 2); paint2(); go(2);
+  } catch (e) {
+    if (/escaneado/.test(e.message)) { st.genes = []; st.termos = {}; st.ativos = []; st.maxPasso = Math.max(st.maxPasso, 2); paint2(); go(2); showWarn2(e.message); }
+    else showErr("err1", e.message);
+  } finally { check1(); }
+});
+
+/* ===== etapa 2: predisposições ===== */
+function predAtiva(id){
+  if (st.off.has(id)) return false;
+  if (st.manual.has(id)) return true;
+  return st.genes.some(g => g.pred === id && g.status === "alterado") || !!st.termos[id];
+}
+function predsAtivas(){ return PREDS.filter(p => predAtiva(p.id)).map(p => p.id); }
+let warn2 = "";
+function showWarn2(msg){ warn2 = msg; paintSide2(); }
+function paint2(){
+  warn2 = "";
+  const ids = [...new Set([...st.genes.map(g => g.pred), ...Object.keys(st.termos), ...st.manual])];
+  const ordem = ids.sort((a, b) => (predAtiva(b) - predAtiva(a)));
+  $("pd").innerHTML = ordem.length ? ordem.map(id => {
+    const p = PRED[id]; const gs = st.genes.filter(g => g.pred === id); const on = predAtiva(id);
+    return `<section class="pc2${on ? " on" : ""}"><div class="hd">${T(p.alerta ? "triangle-alert" : "dna", true)}<span><b>${esc(p.nome)}</b><small>${esc([p.area, (p.protos || []).filter(x => x[1] >= 2).map(x => byId[x[0]].nome).join(", ")].filter(Boolean).join(" · "))}</small></span><button class="sw" type="button" role="switch" aria-checked="${on}" data-sw="${id}" aria-label="Considerar ${esc(p.nome)}"></button></div>
+      <div class="ev">${gs.map(g => `<div class="evr"><div style="min-width:0"><b>${esc(g.gene)}</b>${g.rs ? `<span class="gt">${esc(g.rs)}</span>` : ""}${g.gt ? `<span class="gt">${esc(g.gt)}</span>` : ""}<p title="${esc(g.trecho)}">${esc(g.trecho)}</p></div><div class="tg3"><button type="button" class="a" data-g="${esc(g.key)}" data-s="alterado" aria-pressed="${g.status === "alterado"}">Alterado</button><button type="button" class="n" data-g="${esc(g.key)}" data-s="normal" aria-pressed="${g.status === "normal"}">Normal</button></div></div>`).join("")}
+      ${st.termos[id] ? `<div class="evr"><div style="min-width:0"><b>Citado no laudo</b><p title="${esc(st.termos[id])}">${esc(st.termos[id])}</p></div></div>` : ""}</div></section>`;
+  }).join("") : `<section class="glass box"><p style="margin:0;color:var(--ink-2)">Não encontrei genes nem achados conhecidos neste laudo. Marque as predisposições à mão abaixo, ou siga só com os objetivos do paciente.</p></section>`;
+  $("pd").querySelectorAll("[data-sw]").forEach(b => b.addEventListener("click", () => {
+    const id = b.dataset.sw; const on = b.getAttribute("aria-checked") === "true";
+    if (on) { st.off.add(id); st.manual.delete(id); } else { st.off.delete(id); st.manual.add(id); }
+    paint2();
+  }));
+  $("pd").querySelectorAll("[data-g]").forEach(b => b.addEventListener("click", () => {
+    const g = st.genes.find(x => x.key === b.dataset.g); g.status = g.status === b.dataset.s ? "indefinido" : b.dataset.s; st.off.delete(g.pred); paint2();
+  }));
+  $("add").innerHTML = PREDS.filter(p => !ids.includes(p.id)).map(p => `<button type="button" data-add="${p.id}">+ ${esc(p.nome)}</button>`).join("");
+  $("add").querySelectorAll("[data-add]").forEach(b => b.addEventListener("click", () => { st.manual.add(b.dataset.add); st.off.delete(b.dataset.add); paint2(); }));
+  paintSide2();
+}
+function paintSide2(){
+  const alt = st.genes.filter(g => g.status === "alterado").length;
+  const indef = st.genes.filter(g => g.status === "indefinido").length;
+  $("side2").innerHTML = `<section class="reading"><small class="k">Leitura do laudo</small><h3>${predsAtivas().length} predisposiç${predsAtivas().length === 1 ? "ão" : "ões"} marcada${predsAtivas().length === 1 ? "" : "s"}</h3>
+    <p>Leitura por palavras, sem inteligência artificial. Confira cada item: a página não substitui a sua leitura do laudo.</p>
+    <div class="stat"><div><b>${st.genes.length}</b><small>Genes</small></div><div><b>${alt}</b><small>Alterados</small></div><div><b>${Object.keys(st.termos).length}</b><small>Achados</small></div></div>
+    ${indef ? `<div class="warn">${indef} gene${indef === 1 ? "" : "s"} sem resultado claro no texto. Marque Alterado ou Normal se souber.</div>` : ""}
+    ${warn2 ? `<div class="warn">${esc(warn2)}</div>` : ""}
+    ${st.ativos.length ? `<p style="margin-top:14px"><b style="font-family:var(--f-head)">Ativos citados no laudo</b></p><div class="atv">${st.ativos.map(a => `<span>${esc(a.nome)}</span>`).join("")}</div>` : ""}
+  </section>`;
+}
+$("to3").addEventListener("click", () => { st.maxPasso = Math.max(st.maxPasso, 3); paintPgrid(); paintSide3(); go(3); });
+
+/* ===== etapa 3: clínica ===== */
+function ranking(){
+  const sc = {}, porque = {};
+  const add = (id, w, motivo) => { sc[id] = (sc[id] || 0) + w; (porque[id] = porque[id] || new Set()).add(motivo); };
+  predsAtivas().forEach(pid => { const p = PRED[pid]; const alto = st.genes.some(g => g.pred === pid && g.alto); (p.protos || []).forEach(([id, w]) => add(id, alto ? w * 1.5 : w, p.nome)); });
+  st.obj.forEach(o => (OBJETIVOS[o] || []).forEach(([id, w]) => add(id, w, "Objetivo: " + DNOME[o])));
+  st.ativos.forEach(a => a.protos.forEach(id => add(id, 0.5, "Ativo do laudo: " + a.nome)));
+  return Object.entries(sc).filter(([, v]) => v >= 2).sort((a, b) => b[1] - a[1]).map(([id, v]) => ({ id, v, porque: [...porque[id]] }));
+}
+function paintPgrid(){
+  const cand = new Set(ranking().map(x => x.id));
+  $("pgrid").innerHTML = PROTOS.map(p => `<button type="button" data-id="${p.id}" aria-pressed="${st.prot.has(p.id)}">${T(PICON[p.id] || "leaf", true)}<span style="min-width:0"><b>${esc(p.nome)}</b>${cand.has(p.id) ? `<span class="rec">Indicado pelo laudo</span>` : `<small>${esc(p.via)}</small>`}</span><span class="ck">${I("check")}</span></button>`).join("");
+  $("pgrid").querySelectorAll("button").forEach(b => b.addEventListener("click", () => { const id = b.dataset.id; st.prot.has(id) ? st.prot.delete(id) : st.prot.add(id); b.setAttribute("aria-pressed", st.prot.has(id)); }));
+}
+function paintSide3(){
+  const ids = predsAtivas();
+  $("side3").innerHTML = `<section class="reading"><small class="k">Predisposições marcadas</small><h3>${ids.length ? ids.length + " no laudo" : "Nenhuma marcada"}</h3>
+    <div class="areas">${ids.map(id => `<span><i></i>${esc(PRED[id].nome)}</span>`).join("")}${[...st.obj].map(o => `<span class="media"><i></i>${esc(DNOME[o])}</span>`).join("")}</div>
+    ${ids.length || st.obj.size ? "" : `<p style="margin-top:8px">Volte e marque ao menos uma predisposição ou um objetivo do paciente.</p>`}</section>`;
+}
+$("yn").querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+  st.inj = b.dataset.v === "sim";
+  $("yn").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  $("inj-det").hidden = !st.inj; $("gerar").disabled = false;
+}));
+$("tec").innerHTML = TECS.map(([n, ic]) => `<button type="button" data-n="${esc(n)}" aria-pressed="false">${I(ic)}${esc(n)}</button>`).join("");
+$("tec").querySelectorAll("button").forEach(b => b.addEventListener("click", () => { const n = b.dataset.n; st.tec.has(n) ? st.tec.delete(n) : st.tec.add(n); b.setAttribute("aria-pressed", st.tec.has(n)); }));
+$("gerar").addEventListener("click", () => { st.maxPasso = 4; aberto = "plano"; paint4(); go(4); });
+
+/* ===== etapa 4: indicação por regras ===== */
+const SIT = { ja_aplica: "Você já aplica", implantar: "Implantar", recurso: "Recurso da clínica", tecnologia: "Tecnologia", ajuste: "Ajuste e exames" };
+function injetaveisProprios(){ return st.inj ? $("outros").value.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean) : []; }
+function tecsPara(pid, demanda){ return [...st.tec].filter(n => { const t = TECS.find(x => x[0] === n); return t && (t[2].includes(pid) || (demanda && t[3].includes(demanda))); }); }
+function melhorFormato(pid){
+  const p = PRED[pid]; const protos = (p.protos || []).slice().sort((a, b) => b[1] - a[1]);
+  const meus = injetaveisProprios().filter(x => p.inj && p.inj.test(N(x)));
+  const tecs = tecsPara(pid, p.demanda);
+  const jaAplica = protos.find(([id]) => st.prot.has(id));
+  const alts = [];
+  let best;
+  if (jaAplica) best = { tipo: "ja_aplica", nome: byId[jaAplica[0]].nome, id: jaAplica[0], txt: "Você já roda este protocolo e ele cobre esta predisposição." };
+  else if (meus.length) best = { tipo: "recurso", nome: meus.join(", "), txt: "Seu injetável cobre esta necessidade. Recurso da clínica, fora dos protocolos Hormones." };
+  else if (protos.length && protos[0][1] >= 2 && st.inj !== false) best = { tipo: "implantar", nome: byId[protos[0][0]].nome, id: protos[0][0], txt: "Protocolo Hormones que melhor atende esta predisposição." };
+  else if (tecs.length) best = { tipo: "tecnologia", nome: tecs.join(", "), txt: "Tecnologia da clínica para esta necessidade." };
+  else if (protos.length && st.inj === false) best = { tipo: "implantar", nome: byId[protos[0][0]].nome, id: protos[0][0], txt: "Exige estrutura de injetáveis. Enquanto isso, conduza com exames, hábitos e as tecnologias que tiver." };
+  else best = { tipo: "ajuste", nome: p.area, txt: p.texto || p.alertaTexto || "Acompanhar com exames." };
+  if (best.tipo !== "ja_aplica" && jaAplica) alts.push(byId[jaAplica[0]].nome);
+  protos.filter(([id]) => id !== best.id).slice(0, 2).forEach(([id]) => alts.push(byId[id].nome));
+  if (best.tipo !== "tecnologia") tecs.forEach(t => alts.push(t));
+  if (best.tipo !== "recurso") meus.forEach(m => alts.push(m));
+  return { best, alts: [...new Set(alts)] };
+}
+function avaliaProprios(ids){
+  return injetaveisProprios().map(nome => {
+    const n = N(nome);
+    const evita = ids.map(id => PRED[id]).find(p => p.evitar && p.evitar.test(n));
+    if (evita) return { nome, av: "evitar", txt: `Conflita com: ${evita.nome.toLowerCase()}.` };
+    const ajusta = ids.map(id => PRED[id]).find(p => p.ajustarInj && p.ajustarInj.test(n));
+    if (ajusta) return { nome, av: "ajustar", txt: `Para ${ajusta.nome.toLowerCase()}, prefira a forma ativa.` };
+    const usa = ids.map(id => PRED[id]).filter(p => p.inj && p.inj.test(n));
+    if (usa.length) return { nome, av: "usar", txt: `Atende: ${usa.map(p => p.nome.toLowerCase()).join("; ")}.` };
+    return { nome, av: "neutro", txt: "Sem relação direta com o que o laudo mostrou." };
+  });
+}
+/* ===== dados completos dos protocolos (os mesmos do painel principal) ===== */
+const D = window.HM_DADOS || { PROTOCOLOS: [], BODY: {}, IMGS: {}, HEMACIAS: "" };
+const FULL = Object.fromEntries(D.PROTOCOLOS.map(p => [p.id, p]));
+const BODY = D.BODY, IMGS = D.IMGS, HEMACIAS = D.HEMACIAS;
+ICONS.plus = '<path d="M5 12h14" /> <path d="M12 5v14" />';
+const VIAS = {EV:"Endovenosa", IM:"Intramuscular", SC:"Subcutânea", ID:"Intradérmica"};
+const SICON = {ativos:"flask-conical",pares:"heart-pulse",lista:"list-checks",passos:"layers",etapas:"route",destaque:"sparkles",alerta:"triangle-alert",texto:"info",duo:"activity",planos:"calendar-days",manejo:"shield-plus"};
+function kIcon(k){
+  const s = k.toLowerCase();
+  const R = [[/atividade f|exerc/,"dumbbell"],[/dura/,"clock"],[/sess|aplica|terap/,"calendar-days"],[/via|análogo/,"syringe"],[/consulta/,"stethoscope"],[/bioimped|avalia|exame/,"scale"],[/suporte|acompanh/,"hand-heart"],[/ativ|fórmul/,"flask-conical"],[/indica/,"target"],[/^ação|^mecanismo/,"activity"],[/hidrat|água/,"glass-water"],[/formato/,"clipboard-list"],[/público/,"user-round"],[/aliment|nutri|dieta/,"salad"],[/sono|descanso/,"moon"],[/física|treino|força/,"dumbbell"],[/estresse/,"brain"],[/solar/,"sun"],[/cigarro|álcool|tabaco/,"cigarette-off"],[/suplement/,"pill"],[/cognit/,"book-open"],[/pele/,"sparkles"],[/náusea/,"waves"],[/diarr/,"droplets"],[/constip/,"activity"],[/fraqueza/,"zap"],[/ultrassom/,"scan-face"],[/potência/,"zap"],[/planilha/,"clipboard-list"],[/metabol/,"flame"],[/insulina/,"droplet"],[/hepát/,"shield-plus"],[/neurol|energ/,"brain"],[/circula/,"heart-pulse"],[/desconforto/,"hand-heart"],[/medica/,"pill"],[/repouso/,"bed"]];
+  for (const [re, n] of R) if (re.test(s)) return n;
+  return "leaf";
+}
+const allAtivos = p => p.secoes.filter(s => s.t === "ativos").flatMap(s => s.itens);
+function weeksOf(p){
+  const d = p.duracao, nums = [...d.matchAll(/(\d+)/g)].map(m => +m[1]);
+  if (!nums.length) return null;
+  if (/semana/.test(d)) return { total: Math.max(...nums), tiers: null };
+  const w = nums.map(n => Math.round(n / 7));
+  return { total: Math.max(...w), tiers: w.length > 1 ? w : null };
+}
+function weeksHtml(p, cls){
+  const w = weeksOf(p); if (!w) return `<div class="${cls === "pdf" ? "wl" : "wk-l"}"><span>Uso contínuo, <b>${esc(p.duracao.toLowerCase())}</b></span></div>`;
+  const cells = Array.from({ length: 13 }, (_, i) => {
+    if (i >= w.total) return "<i></i>";
+    if (!w.tiers) return '<i class="on"></i>';
+    const t = w.tiers.findIndex(x => i < x); return `<i class="${t === 0 ? "on" : t === 1 ? "t2" : "t3"}"></i>`;
+  }).join("");
+  return `<div class="${cls === "pdf" ? "wks" : "weeks"}">${cells}</div><div class="${cls === "pdf" ? "wl" : "wk-l"}"><span>Semana 1</span><span><b>${esc(p.duracao)}</b></span></div>`;
+}
+function ringSvg(n, z){
+  const r = 42, C = 2 * Math.PI * r, gap = n > 1 ? 4 : 0, seg = C / Math.max(n, 1) - gap;
+  return `<svg width="${z}" height="${z}" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="rg${z}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ff0a6"/><stop offset="1" stop-color="#14a865"/></linearGradient></defs><circle cx="50" cy="50" r="${r}" fill="none" stroke="rgba(128,128,128,.22)" stroke-width="9"/><circle cx="50" cy="50" r="${r}" fill="none" stroke="url(#rg${z})" stroke-width="9" stroke-linecap="butt" stroke-dasharray="${seg.toFixed(2)} ${gap}" transform="rotate(-90 50 50)"/></svg>`;
+}
+function viasOf(p){ return p.via.split(/\s*·\s*/).filter(Boolean).map(v => ({ k: v, nome: VIAS[v] || v })); }
+const ativoWord = p => p.id === "mounjaro" ? "medicações" : "ativos";
+const head = (s, icon) => `<div class="bh">${T(icon || SICON[s.t])}<h3>${esc(s.titulo)}</h3></div>${s.sub ? `<p class="bsub">${esc(s.sub)}</p>` : ""}`;
+let atN = 0;
+const ativoCard = a => { atN++; return `<div class="at"><div class="at-h"><div><span class="no">${String(atN).padStart(2, "0")}</span><b>${esc(a.n)}</b>${a.v ? `<span class="via">${esc(VIAS[a.v] || a.v)}</span>` : ""}</div>${a.d ? `<span class="dose">${esc(a.d)}</span>` : ""}</div>
+  ${a.composicao ? `<div class="comp">${a.composicao.map(c => `<div><span>${esc(c[0])}</span><b>${esc(c[1])}</b></div>`).join("")}</div>` : ""}
+  <p>${esc(a.txt)}</p>
+  ${a.lista ? `<ul>${a.lista.map(x => `<li>${I("circle-check-big")}<span>${esc(x)}</span></li>`).join("")}</ul>` : ""}
+  ${a.ben ? `<div class="ben">${I("sparkles")}<span>${esc(a.ben)}</span></div>` : ""}</div>`; };
+const RB = {
+  ativos: s => `<section class="glass block">${head(s)}<div class="ativos">${s.itens.map(ativoCard).join("")}</div></section>`,
+  pares: s => `<section class="glass block">${head(s)}${s.intro ? `<p class="intro">${esc(s.intro)}</p>` : ""}<div class="pares">${s.itens.map(([k, v]) => `<div class="par">${T(kIcon(k), true)}<div><b>${esc(k)}</b><span>${esc(v)}</span></div></div>`).join("")}</div></section>`,
+  lista: s => `<section class="glass block">${head(s)}<ul class="lista">${s.itens.map(x => `<li>${I("circle-check-big")}<span>${esc(x)}</span></li>`).join("")}</ul></section>`,
+  passos: s => `<section class="glass block">${head(s)}<div class="serv">${s.itens.map(([k, v]) => `<div class="sv">${T(kIcon(k), true)}<b>${esc(k)}</b><p>${esc(v)}</p></div>`).join("")}</div></section>`,
+  etapas: s => `<section class="glass block">${head(s)}<ol class="etapas">${s.itens.map(([k, v]) => `<li><b>${esc(k)}</b><p>${esc(v)}</p></li>`).join("")}</ol></section>`,
+  destaque: s => `<section class="destaque">${T("sparkles")}<div><h3>${esc(s.titulo)}</h3>${s.corpo.map(x => `<p>${esc(x)}</p>`).join("")}</div></section>`,
+  alerta: s => `<section class="alerta">${T("triangle-alert")}<div><h3>${esc(s.titulo)}</h3><ul>${s.itens.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></section>`,
+  texto: s => `<section class="glass block texto">${head(s)}${s.corpo.map(x => `<p>${esc(x)}</p>`).join("")}</section>`,
+  duo: s => `<section class="glass block">${head(s)}<div class="duo">${s.cols.map(c => `<div><h4>${I("circle-check-big")}${esc(c.h)}</h4><ul>${c.itens.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div></section>`,
+  planos: s => `<section class="glass block">${head(s)}<div class="planos">${s.itens.map(p => `<div class="plano"><h4>${esc(p.h)}</h4><div class="dur">${I("calendar-days")}${esc(p.dur)}</div><ul>${p.comp.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`).join("")}</div></section>`,
+  manejo: s => `<section class="glass block">${head(s)}<div class="manejo">${s.itens.map(m => `<div class="mj"><h4>${T(kIcon(m.h), true)}${esc(m.h)}</h4><dl>${m.medidas.map(([k, v]) => `<dt>${esc(k)}</dt><dd class="${k === "Medicação" ? "med" : ""}">${esc(v)}</dd>`).join("")}</dl></div>`).join("")}</div></section>`
+};
+function gallery(p){
+  const img = IMGS[p.id]; let g = img ? [img.hero, ...img.gal] : [];
+  if (p.id === "revitalize") g.splice(1, 0, { src: HEMACIAS, alt: "Corrente sanguínea" });
+  g = g.slice(0, 4); if (!g.length) return "";
+  return `<section class="gal n${g.length}">${g.map(x => `<figure><img src="${x.src}" alt="${esc(x.alt)}" loading="lazy"></figure>`).join("")}</section>`;
+}
+function stageHtml(p){
+  const b = BODY[p.id] || [];
+  return `<div class="stage${b.length > 1 ? " two" : ""}">${b.map(x => `<div class="bw" style="--ar:${x.w}/${x.h}"><img src="${x.src}" alt="Corpo humano com as regiões do protocolo ${esc(p.nome)} em destaque">${x.pts.map(([px, py]) => `<span class="mk" style="left:${px}%;top:${py}%"></span>`).join("")}</div>`).join("")}
+    <div class="fl a"><small>Região alvo</small><b>${esc(DNOME[p.demandas[0]])}</b></div>
+    <div class="fl b"><small>Duração</small><b>${esc(p.duracao)}</b></div></div>`;
+}
+function compostos(id){
+  const p = FULL[id];
+  if (!p) return (byId[id] ? byId[id].ativos : []).map(a => ({ n: a.n, d: a.d || "", c: [] }));
+  return allAtivos(p).map(a => ({ n: a.n, d: a.d || "", c: (a.composicao || []).map(c => c[0]) }));
+}
+const cmpTxt = id => compostos(id).map(a => a.n + (a.c.length ? ` (${a.c.join(", ")})` : "")).join(" · ");
+function pacTxt(){
+  const idade = $("idade").value.trim();
+  return [st.sexo, idade ? idade + " anos" : "", st.obj.size ? "objetivos: " + [...st.obj].map(o => DNOME[o].toLowerCase()).join(", ") : ""].filter(Boolean).join(" · ");
+}
+
+let R = null, aberto = "plano";
+function montar(){
+  const ids = predsAtivas();
+  const rank = ranking();
+  if (!st.escolha) { st.escolha = new Set(rank.slice(0, 4).map(r => r.id)); rank.forEach(r => st.vistos.add(r.id)); }
+  rank.forEach(r => { if (!st.vistos.has(r.id)) { st.escolha.add(r.id); st.vistos.add(r.id); } });
+  const genesDe = id => st.genes.filter(g => g.pred === id && g.status === "alterado").map(g => g.gene).filter((x, i, a) => a.indexOf(x) === i);
+  const info = id => {
+    const p = byId[id], r = rank.find(x => x.id === id);
+    const preds = ids.filter(pid => (PRED[pid].protos || []).some(([x]) => x === id));
+    return { id, nome: p.nome, v: r ? r.v : 0, sit: st.prot.has(id) ? "ja_aplica" : "implantar", porque: r ? r.porque : [],
+      genes: [...new Set(preds.flatMap(genesDe))], ajustes: ids.map(pid => PRED[pid].ajustes && PRED[pid].ajustes[id]).filter(Boolean),
+      tecs: [...new Set(p.demandas.flatMap(d => tecsPara(null, d)))] };
+  };
+  const cand = rank.map(r => info(r.id));
+  const plano = PROTOS.filter(p => st.escolha.has(p.id)).map(p => info(p.id)).sort((a, b) => b.v - a.v);
+  const situacoes = ids.map(id => ({ id, nome: PRED[id].nome, genes: genesDe(id), ...melhorFormato(id) }));
+  const alertas = ids.map(id => PRED[id]).filter(p => p.alerta || p.alertaTexto).map(p => `${p.nome}: ${p.texto || p.alertaTexto}`);
+  const exames = [...new Set(ids.flatMap(id => PRED[id].exames || []))];
+  const proprios = avaliaProprios(ids);
+  const faltam = plano.filter(x => x.sit === "implantar").map(x => x.nome);
+  const sint = (ids.length ? `O laudo aponta ${ids.length} predisposiç${ids.length === 1 ? "ão" : "ões"}, com destaque para ${ids.slice(0, 3).map(id => PRED[id].nome.toLowerCase()).join(", ")}. ` : "Sem predisposições marcadas; a indicação segue os objetivos do paciente. ")
+    + (plano.length ? `O plano começa pelo ${plano[0].nome}${plano[1] ? `, seguido do ${plano[1].nome}` : ""}.` : cand.length ? "Marque na lista os protocolos que entram no plano." : "Nenhum protocolo atingiu a pontuação mínima: confira as predisposições ou marque os objetivos do paciente.");
+  R = { ids, cand, plano, situacoes, alertas, exames, proprios, faltam, sint, info };
+}
+function paint4(){ montar(); paintAside4(); abrir(aberto); }
+function paintAside4(){
+  const r = R, pac = pacTxt();
+  $("qbox4").innerHTML = `<div class="row"><span class="eyebrow">Paciente</span><button class="link" type="button" data-go4="2">Ajustar</button></div>
+    ${pac ? `<div class="pac">${esc(pac)}</div>` : ""}
+    ${r.ids.length ? `<div class="chips">${r.ids.map(id => `<span class="pill">${esc(PRED[id].nome)}</span>`).join("")}</div>` : `<div class="pac" style="font-weight:500;color:var(--ink-2)">Sem predisposições marcadas.</div>`}`;
+  const candIds = new Set(r.cand.map(c => c.id));
+  const outros = PROTOS.filter(p => !candIds.has(p.id)).map(p => r.info(p.id));
+  const card = x => { const on = st.escolha.has(x.id), p = byId[x.id]; return `<div class="pc pk${on ? " in" : ""}" data-card="${x.id}" aria-current="${aberto === x.id}">
+    <button class="cb" type="button" role="checkbox" aria-checked="${on}" data-pick="${x.id}" aria-label="Incluir ${esc(x.nome)} no plano">${I("check")}</button>
+    <button class="po" type="button" data-open="${x.id}"><b>${esc(x.nome)}</b><small>${esc(p.via)} · ${esc(p.duracao)}</small><span class="cmp">${esc(cmpTxt(x.id))}</span>
+    ${x.porque.length ? `<span class="why">${x.porque.slice(0, 3).map(h => `<span>${esc(h.replace(/^(Objetivo|Ativo do laudo): /, ""))}</span>`).join("")}</span>` : ""}</button></div>`; };
+  $("list4").innerHTML = `<button class="pc pv" type="button" data-open="plano" aria-current="${aberto === "plano"}">${T("clipboard-list", true)}<span style="min-width:0"><b>Plano de tratamento</b><small>${st.escolha.size} protocolo${st.escolha.size === 1 ? "" : "s"} no plano</small></span></button>
+    <div class="list-h"><small>Indicados pelo laudo · ${r.cand.length}</small></div>${r.cand.length ? r.cand.map(card).join("") : `<p class="vazio">Nenhum protocolo atingiu a pontuação mínima.</p>`}
+    ${outros.length ? `<div class="sep">Outros protocolos</div>${outros.map(card).join("")}` : ""}`;
+}
+function bodyStage(lista){
+  const bs = lista.filter(id => BODY[id] && BODY[id][0]).slice(0, 2).map(id => ({ id, b: BODY[id][0] }));
+  return `<div class="stage${bs.length > 1 ? " two" : ""}">${bs.map(({ id, b }) => `<div class="bw" style="--ar:${b.w}/${b.h}"><img src="${b.src}" alt="Corpo com as regiões do ${esc(byId[id].nome)} em destaque">${b.pts.map(([px, py]) => `<span class="mk" style="left:${px}%;top:${py}%"></span>`).join("")}</div>`).join("")}`;
+}
+function planoHtml(){
+  const r = R, pac = pacTxt(), ch = r.plano;
+  const corpos = ch.length ? ch.map(x => x.id) : r.cand.length ? [r.cand[0].id] : ["pes"];
+  return `
+  <header class="hero"><div class="hero-main">
+    <div class="hero-top"><div class="tags"><span class="tag">${I("dna")}Teste genético</span><span class="tag">${I("lock")}Sem IA</span></div></div>
+    <h2>Plano de tratamento</h2><p class="sub">${esc(pac || "Indicação pelo teste genético")}</p><p class="obj">${esc(r.sint)}</p>
+    <div class="mini"><div><small>${I("dna")}Predisposições</small><strong>${r.ids.length}</strong></div><div><small>${I("layers")}No plano</small><strong>${ch.length} protocolo${ch.length === 1 ? "" : "s"}</strong></div></div>
+    <div class="acts"><button class="btn" type="button" id="pdf-btn">${I("download")}Baixar PDF</button>
+      <div class="seg pt" role="group" aria-label="Tema do PDF"><button type="button" data-pt="dark" aria-pressed="${pdfTema === "dark"}">${I("moon")}Escuro</button><button type="button" data-pt="light" aria-pressed="${pdfTema === "light"}">${I("sun")}Claro</button></div></div>
+    <div class="acts" style="margin-top:10px"><button class="ghost2" type="button" data-go4="3">${I("arrow-left")}Ajustar respostas</button><button class="ghost2" type="button" id="novo">${I("rotate-ccw")}Novo laudo</button></div>
+    <div class="note" id="pdf-note" role="status"></div>
+  </div>${bodyStage(corpos)}
+    <div class="fl a"><small>Predisposições</small><b>${r.ids.length ? esc(PRED[r.ids[0]].nome) : "Nenhuma marcada"}</b></div>
+    <div class="fl b"><small>Protocolo principal</small><b>${ch.length ? esc(ch[0].nome) : "A escolher"}</b></div></div></header>
+
+  <section class="glass block"><div class="bh">${T("route")}<h3>Protocolos do plano</h3></div><p class="bsub">Marque ou desmarque na lista de protocolos. A escolha fica salva neste navegador.</p>
+  ${ch.length ? `<div class="plan">${ch.map((x, i) => `<article class="pl"><div class="num">${String(i + 1).padStart(2, "0")}</div><div style="min-width:0">
+      <h4>${esc(x.nome)}<span class="st ${x.sit}">${esc(SIT[x.sit])}</span></h4>
+      <p>${esc(x.porque.length ? x.porque.join(" · ") : "Escolhido por você")}</p>
+      ${x.genes.length ? `<span class="lb2">Genes</span><div class="chips g">${x.genes.map(g => `<span>${esc(g)}</span>`).join("")}</div>` : ""}
+      <span class="lb2">Compostos e doses</span><div class="cps">${compostos(x.id).map(a => `<div><b>${esc(a.n)}</b>${a.d ? `<span>${esc(a.d)}</span>` : ""}${a.c.length ? `<small>${esc(a.c.join(", "))}</small>` : ""}</div>`).join("")}</div>
+      ${x.ajustes.map(a => `<div class="adj"><b>Ajuste pela genética:</b> ${esc(a)}</div>`).join("")}
+      ${x.tecs.length ? `<div class="how"><b>Combinar com:</b> ${esc(x.tecs.join(", "))}</div>` : ""}
+      <div class="src"><span>Fonte: protocolo ${esc(x.nome)}</span><span class="src-a"><button class="link" type="button" data-open="${x.id}">${I("book-open")}Ver protocolo completo</button><button class="link mut" type="button" data-pick="${x.id}">${I("x")}Tirar do plano</button></span></div>
+    </div></article>`).join("")}</div>` : `<p class="vazio">Nenhum protocolo no plano ainda. Marque na lista os que você quer usar.</p>`}</section>
+
+  ${r.situacoes.length ? `<section class="glass block"><div class="bh">${T("target")}<h3>Melhor formato para cada situação</h3></div><div class="fmt">${r.situacoes.map(s => `<div class="fm"><div><h4>${esc(s.nome)}</h4>${s.genes.length ? `<div class="gs">${s.genes.map(g => `<span>${esc(g)}</span>`).join("")}</div>` : ""}</div>
+    <div class="best"><div><span class="st ${s.best.tipo}">${esc(SIT[s.best.tipo])}</span></div><b>${esc(s.best.nome)}</b><p>${esc(s.best.txt)}</p>${s.alts.length ? `<span class="alt">Outras opções: ${esc(s.alts.join(", "))}</span>` : ""}</div></div>`).join("")}</div></section>` : ""}
+
+  ${r.proprios.length ? `<section class="glass block"><div class="bh">${T("syringe")}<h3>Seus injetáveis frente ao laudo</h3></div><div class="inj">${r.proprios.map(x => `<div><b>${esc(x.nome)}<span class="av ${x.av === "neutro" ? "" : x.av}">${x.av === "neutro" ? "sem relação" : esc(x.av)}</span></b><p>${esc(x.txt)}</p></div>`).join("")}</div></section>` : ""}
+
+  ${st.tec.size ? `<section class="glass block"><div class="bh">${T("zap")}<h3>Tecnologias da clínica</h3></div><p class="bsub">Complemento clínico. Os equipamentos não fazem parte dos protocolos Hormones.</p><div class="serv">${[...st.tec].map(t => { const usos = ch.filter(x => x.tecs.includes(t)).map(x => x.nome); return `<div class="sv">${T("zap", true)}<b>${esc(t)}</b><p>${esc(TEC_PAPEL[t] || "")}</p>${usos.length ? `<small>Combinar com</small><p style="margin-top:2px">${esc(usos.join(", "))}</p>` : `<p class="cd">Sem uso direto para este plano.</p>`}</div>`; }).join("")}</div></section>` : ""}
+
+  ${r.faltam.length || r.exames.length ? `<section class="glass block"><div class="duo">
+    ${r.faltam.length ? `<div><h4>${I("target")}O que falta na clínica</h4><ul>${r.faltam.map(x => `<li>Implantar o ${esc(x)}${st.inj === false ? " (exige estrutura de injetáveis)" : ""}</li>`).join("")}</ul></div>` : ""}
+    ${r.exames.length ? `<div><h4>${I("microscope")}Exames complementares</h4><ul>${r.exames.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
+  </div></section>` : ""}
+
+  ${r.alertas.length ? `<section class="alerta">${T("triangle-alert")}<div><h3>Cuidados</h3><ul>${r.alertas.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></section>` : ""}
+
+  ${st.genes.length ? `<section class="glass block"><div class="bh">${T("dna")}<h3>Genes lidos no laudo</h3></div><div class="tw"><table class="tbl"><thead><tr><th>Gene</th><th>Variante</th><th>Genótipo</th><th>Resultado</th><th>Predisposição</th></tr></thead><tbody>${st.genes.map(g => `<tr><td><b>${esc(g.gene)}</b></td><td>${esc(g.rs)}</td><td>${esc(g.gt)}</td><td>${g.status === "alterado" ? `<span class="imp alto">alterado</span>` : g.status === "normal" ? `<span class="imp baixo">normal</span>` : "não definido"}</td><td>${esc(PRED[g.pred].nome)}</td></tr>`).join("")}</tbody></table></div></section>` : ""}
+
+  <div class="disc">${I("info")}<span>Sugestão gerada por regras fixas a partir dos protocolos Hormones, sem inteligência artificial. Confirme o laudo, a indicação, as contraindicações e as doses na avaliação clínica antes de prescrever.</span></div>`;
+}
+function protoHtml(id){
+  const p = FULL[id], x = R.info(id), on = st.escolha.has(id);
+  const topo = `<div class="back"><button class="link" type="button" data-open="plano">${I("arrow-left")}Plano de tratamento</button>
+    <button class="${on ? "btn" : "ghost3"}" type="button" data-pick="${id}">${I(on ? "check" : "plus")}${on ? "No plano" : "Incluir no plano"}</button></div>
+    ${x.porque.length || x.genes.length || x.ajustes.length ? `<section class="glass block gw"><div class="bh">${T("dna")}<h3>Por que entra no plano</h3></div>
+      ${x.porque.length ? `<p class="bsub">${esc(x.porque.join(" · "))}</p>` : ""}
+      ${x.genes.length ? `<span class="lb2">Genes</span><div class="chips g">${x.genes.map(g => `<span>${esc(g)}</span>`).join("")}</div>` : ""}
+      ${x.ajustes.map(a => `<div class="adj"><b>Ajuste pela genética:</b> ${esc(a)}</div>`).join("")}
+      ${x.tecs.length ? `<div class="how"><b>Combinar com:</b> ${esc(x.tecs.join(", "))}</div>` : ""}</section>` : ""}`;
+  if (!p) return topo + `<section class="glass block"><p class="bsub">Os detalhes deste protocolo não carregaram. Recarregue a página.</p></section>`;
+  atN = 0;
+  const n = allAtivos(p).length, fa = p.secoes.findIndex(s => s.t === "ativos");
+  const body = p.secoes.map((s, i) => RB[s.t](s) + (i === fa ? gallery(p) : "")).join("");
+  const ficha = p.ficha.filter(([k]) => !/^dura|^vias?$/i.test(k));
+  return topo + `
+    <header class="hero"><div class="hero-main">
+      <div class="hero-top"><div class="tags">${p.demandas.map(d => `<span class="tag">${I(DICON[d])}${esc(DNOME[d])}</span>`).join("")}</div></div>
+      <h2>${esc(p.nome)}</h2><p class="sub">${esc(p.completo)}</p><p class="obj">${esc(p.objetivo)}</p>
+      <div class="mini"><div><small>${I("syringe")}Via</small><strong>${esc(p.via)}</strong></div><div><small>${I("flask-conical")}${ativoWord(p)}</small><strong>${n}</strong></div></div>
+    </div>${stageHtml(p)}</header>
+    <div class="metrics">
+      <section class="glass mt"><h4>${I("flask-conical")}Composição</h4><div class="ring"><div class="rv">${ringSvg(n, 104)}<div><b>${n}</b><span>${ativoWord(p)}</span></div></div><p>${n === 1 ? "Um ativo principal" : `${n} ${ativoWord(p)} descritos no protocolo`}</p></div></section>
+      <section class="glass mt"><h4>${I("calendar-days")}Linha do tempo</h4>${weeksHtml(p)}</section>
+      <section class="glass mt"><h4>${I("syringe")}Vias de aplicação</h4><div class="vias">${viasOf(p).map(v => `<div><b>${esc(v.k.length <= 3 ? v.k : "")}</b>${esc(v.nome)}</div>`).join("")}</div></section>
+    </div>
+    ${ficha.length ? `<section class="glass block"><div class="bh">${T("clipboard-list")}<h3>Estrutura</h3></div><div class="ficha">${ficha.map(([k, v]) => `<div class="fi">${I(kIcon(k))}<div><small>${esc(k)}</small><span>${esc(v)}</span></div></div>`).join("")}</div></section>` : ""}
+    ${body}`;
+}
+function abrir(v){
+  aberto = v === "plano" || byId[v] ? v : "plano";
+  $("doc4").innerHTML = aberto === "plano" ? planoHtml() : protoHtml(aberto);
+  $("list4").querySelectorAll("[data-open]").forEach(b => (b.closest(".pk") || b).setAttribute("aria-current", b.dataset.open === aberto));
+  salvar();
+}
+function alternar(id){ st.escolha.has(id) ? st.escolha.delete(id) : st.escolha.add(id); paint4(); }
+$("s4").addEventListener("click", e => {
+  const pk = e.target.closest("[data-pick]"); if (pk) { alternar(pk.dataset.pick); return; }
+  const op = e.target.closest("[data-open]");
+  if (op) { abrir(op.dataset.open); const alvo = $("doc4"); if (op.closest("#list4") && matchMedia("(max-width:980px)").matches) alvo.scrollIntoView({ behavior: "smooth", block: "start" }); else if (!op.closest("#list4")) window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+  const g4 = e.target.closest("[data-go4]"); if (g4) { go(+g4.dataset.go4); return; }
+  const pt = e.target.closest("[data-pt]"); if (pt) { pdfTema = pt.dataset.pt; try { localStorage.setItem("hm-gen-pdf", pdfTema); } catch (er) {} document.querySelectorAll("[data-pt]").forEach(b => b.setAttribute("aria-pressed", b.dataset.pt === pdfTema)); return; }
+  if (e.target.closest("#novo")) { reset(); return; }
+  if (e.target.closest("#pdf-btn")) makePdf();
+});
+
+/* ===== memória: a escolha fica salva neste navegador por 24 horas ===== */
+const KEY = "hm-genetica", TTL = 24 * 3600 * 1000;
+let pdfTema = "dark";
+try { pdfTema = localStorage.getItem("hm-gen-pdf") || (curTheme() === "light" ? "light" : "dark"); } catch (e) {}
+function salvar(){
+  try {
+    if (st.maxPasso < 2) { localStorage.removeItem(KEY); return; }
+    localStorage.setItem(KEY, JSON.stringify({ t: Date.now(), passo: st.passo, aberto, maxPasso: st.maxPasso, sexo: st.sexo, idade: $("idade").value, obj: [...st.obj],
+      genes: st.genes, termos: st.termos, ativos: st.ativos, manual: [...st.manual], off: [...st.off], inj: st.inj, prot: [...st.prot], tec: [...st.tec],
+      outros: $("outros").value, escolha: st.escolha ? [...st.escolha] : null, vistos: [...st.vistos], nomes: st.nomes }));
+  } catch (e) {}
+}
+let tSalvar = 0;
+["click", "input", "change"].forEach(ev => document.addEventListener(ev, () => { clearTimeout(tSalvar); tSalvar = setTimeout(salvar, 120); }, true));
+function restaurar(){
+  let s = null; try { s = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
+  if (!s || !s.t || Date.now() - s.t > TTL || !(s.maxPasso >= 2)) { try { localStorage.removeItem(KEY); } catch (e) {} return false; }
+  Object.assign(st, { sexo: s.sexo || "", genes: s.genes || [], termos: s.termos || {}, ativos: s.ativos || [], inj: s.inj === undefined ? null : s.inj, maxPasso: s.maxPasso,
+    escolha: s.escolha ? new Set(s.escolha) : null, nomes: s.nomes || [] });
+  [["obj", s.obj], ["manual", s.manual], ["off", s.off], ["prot", s.prot], ["tec", s.tec], ["vistos", s.vistos]].forEach(([k, v]) => { st[k].clear(); (v || []).forEach(x => st[k].add(x)); });
+  $("idade").value = s.idade || ""; $("outros").value = s.outros || "";
+  $("sexo").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === st.sexo));
+  $("obj").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", st.obj.has(b.dataset.v)));
+  $("tec").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", st.tec.has(b.dataset.n)));
+  if (st.inj !== null) { $("yn").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", (b.dataset.v === "sim") === st.inj)); $("inj-det").hidden = !st.inj; $("gerar").disabled = false; }
+  aberto = s.aberto || "plano";
+  paintFiles(); paint2();
+  if (st.maxPasso >= 3) { paintPgrid(); paintSide3(); }
+  if (st.maxPasso >= 4) paint4();
+  go(Math.min(s.passo || 2, st.maxPasso));
+  return true;
+}
+function reset(){
+  Object.assign(st, { arquivos: [], sexo: "", texto: "", genes: [], termos: {}, ativos: [], inj: null, maxPasso: 1, escolha: null, nomes: [] });
+  [st.obj, st.manual, st.off, st.prot, st.tec, st.vistos].forEach(s => s.clear());
+  ["texto", "outros", "idade"].forEach(id => $(id).value = "");
+  document.querySelectorAll("#sexo button,#obj button,#yn button,#tec button").forEach(b => b.setAttribute("aria-pressed", "false"));
+  aberto = "plano"; $("inj-det").hidden = true; $("gerar").disabled = true; paintFiles(); showErr("err1", "");
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  go(1);
+}
+
+/* ===== PDF (escuro ou claro) ===== */
+function pdfHtml(){
+  const r = R, data = new Date().toLocaleDateString("pt-BR"), pac = pacTxt(), clr = pdfTema === "light";
+  const ac = clr ? "#13995a" : "#3ee08f";
+  return `<div class="gp${clr ? " light" : ""}">
+    <div class="hd"><img src="/logo-hormones.webp" alt=""><span>Plano de tratamento · teste genético<br>${esc(data)}</span></div>
+    <h1>Plano de tratamento</h1>
+    ${pac ? `<p class="lead"><b>Paciente:</b> ${esc(pac)}</p>` : ""}
+    <p class="lead">${esc(r.sint)}</p>
+    ${r.ids.length ? `<div class="pills">${r.ids.map(id => `<span>${esc(PRED[id].nome)}</span>`).join("")}</div>` : ""}
+    ${r.plano.length ? `<div class="sec"><h2>${P("route", ac)}Protocolos do plano</h2>${r.plano.map((x, i) => { const p = byId[x.id]; return `<div class="c avoid"><h3>${String(i + 1).padStart(2, "0")} · ${esc(x.nome)}<em>${esc(SIT[x.sit])}</em></h3><p class="meta">${esc(p.via)} · ${esc(p.duracao)}</p>${x.porque.length ? `<p>${esc(x.porque.join(" · "))}</p>` : ""}${x.genes.length ? `<span class="k">Genes</span><p>${esc(x.genes.join(", "))}</p>` : ""}<span class="k">Compostos e doses</span><table class="cp">${compostos(x.id).map(a => `<tr><td><b>${esc(a.n)}</b>${a.c.length ? `<br><small>${esc(a.c.join(", "))}</small>` : ""}</td><td>${esc(a.d)}</td></tr>`).join("")}</table>${x.ajustes.length ? `<span class="k">Ajuste pela genética</span><p>${esc(x.ajustes.join(" "))}</p>` : ""}${x.tecs.length ? `<span class="k">Combinar com</span><p>${esc(x.tecs.join(", "))}</p>` : ""}<span class="k">Fonte</span><p>Protocolo ${esc(x.nome)}</p></div>`; }).join("")}</div>` : ""}
+    ${r.situacoes.length ? `<div class="sec"><h2>${P("target", ac)}Melhor formato para cada situação</h2><table><thead><tr><th>Situação</th><th>Genes</th><th>Melhor formato</th><th>Outras opções</th></tr></thead><tbody>${r.situacoes.map(s => `<tr class="avoid"><td><b>${esc(s.nome)}</b></td><td>${esc(s.genes.join(", "))}</td><td><b>${esc(SIT[s.best.tipo])}:</b> ${esc(s.best.nome)}</td><td>${esc(s.alts.join(", "))}</td></tr>`).join("")}</tbody></table></div>` : ""}
+    ${r.proprios.length ? `<div class="sec avoid"><h2>${P("syringe", ac)}Injetáveis da clínica</h2><div class="two">${r.proprios.map(x => `<div class="c"><h3>${esc(x.nome)}<em>${esc(x.av === "neutro" ? "sem relação" : x.av)}</em></h3><p>${esc(x.txt)}</p></div>`).join("")}</div></div>` : ""}
+    ${r.faltam.length || r.exames.length ? `<div class="sec avoid"><div class="two">
+      ${r.faltam.length ? `<div class="c"><span class="k" style="margin:0 0 4px">O que falta na clínica</span><ul>${r.faltam.map(x => `<li>Implantar o ${esc(x)}</li>`).join("")}</ul></div>` : ""}
+      ${r.exames.length ? `<div class="c"><span class="k" style="margin:0 0 4px">Exames complementares</span><ul>${r.exames.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
+    </div></div>` : ""}
+    ${r.alertas.length ? `<div class="sec avoid"><h2>${P("triangle-alert", "#d99a1e")}Cuidados</h2><div class="c al"><ul>${r.alertas.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></div>` : ""}
+    <div class="ft avoid">Sugestão gerada por regras fixas a partir dos protocolos Hormones Mentoring Elite, sem inteligência artificial. Confirme indicação, contraindicações e doses na avaliação clínica antes de prescrever.</div>
+  </div>`;
+}
+async function makePdf(){
+  const btn = $("pdf-btn"), note = $("pdf-note");
+  if (typeof html2pdf === "undefined"){ note.textContent = "O gerador de PDF não carregou. Recarregue a página."; return; }
+  btn.disabled = true; note.textContent = "Montando o PDF…";
+  const clr = pdfTema === "light", fundo = clr ? [246, 250, 247] : [5, 13, 9];
+  const stage = $("pdf-stage"); stage.innerHTML = pdfHtml();
+  const filename = "Hormones-plano-genetico-" + (clr ? "claro-" : "") + new Date().toISOString().slice(0, 10) + ".pdf";
+  try {
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    await Promise.all([...stage.querySelectorAll("img")].map(im => im.complete ? 0 : new Promise(r => { im.onload = im.onerror = r; })));
+    let cv = null;
+    const pdf = await html2pdf().set({ margin: [10, 0, 10, 0], filename, image: { type: "jpeg", quality: 0.94 }, html2canvas: { scale: 2, backgroundColor: clr ? "#f6faf7" : "#050d09", useCORS: true, logging: false }, jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }, pagebreak: { mode: ["css", "legacy"], avoid: [".avoid"] } }).from(stage.firstElementChild).toCanvas().get("canvas").then(c => { cv = c; }).toPdf().get("pdf");
+    const t = pdf.internal.getNumberOfPages(), w = pdf.internal.pageSize.getWidth(), h = pdf.internal.pageSize.getHeight();
+    if (cv){ const pp = cv.width * (h - 20) / w, rest = cv.height - (t - 1) * pp, y = 10 + rest * w / cv.width; if (y < h - 10){ pdf.setPage(t); pdf.setFillColor(...fundo); pdf.rect(0, y - 0.2, w, h - y + 0.2, "F"); } }
+    for (let i = 1; i <= t; i++){ pdf.setPage(i); pdf.setFillColor(...fundo); pdf.rect(0, 0, w, 10, "F"); pdf.rect(0, h - 10, w, 10, "F"); pdf.setFontSize(7.5); pdf.setTextColor(...(clr ? [93, 122, 107] : [108, 138, 122])); pdf.text(`${i} / ${t}`, w - 12, h - 4.5, { align: "right" }); }
+    const url = URL.createObjectURL(pdf.output("blob")), el = document.createElement("a");
+    el.href = url; el.download = filename; document.body.appendChild(el); el.click(); el.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000); note.textContent = "PDF gerado.";
+  } catch (e) { note.textContent = "Não foi possível gerar o PDF. Tente novamente."; }
+  finally { btn.disabled = false; stage.innerHTML = ""; }
+}
+
+window.__analisar = analisar;
+if (!restaurar()) go(1);
+})();
+</script>
+</body>
+</html>

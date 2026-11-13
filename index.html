@@ -81,6 +81,9 @@ button,input,textarea{font:inherit;color:inherit}
 .steps button[aria-current="true"]{background:linear-gradient(140deg,#0c6a42,#25b875);border-color:transparent;color:#fff}
 .mode{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;flex:none}
 .mode:hover{background:rgba(255,255,255,.14)}
+.gen{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;flex:none;text-decoration:none;font-family:var(--f-head);font-weight:700;font-size:12.5px;color:#03140b;background:linear-gradient(140deg,#5ff0a6,#25c47a);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 10px 22px -12px rgba(37,196,122,.9)}
+.gen .ic{width:17px;height:17px}
+@media (max-width:640px){.gen span{display:none}.gen{padding:0;width:42px;height:42px;justify-content:center}}
 
 /* ===== tela 1: triagem ===== */
 .intake{padding-block:30px 60px}
@@ -413,6 +416,7 @@ button,input,textarea{font:inherit;color:inherit}
       <button type="button" id="st1" aria-current="true"><b>1</b><span>O que sente</span></button>
       <button type="button" id="st2" aria-current="false"><b>2</b><span>Protocolos</span></button>
     </nav>
+    <a class="gen" href="/genetica" title="Agente de teste genético"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m10 16 1.5 1.5"/><path d="m14 8-1.5-1.5"/><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/><path d="m16.5 10.5 1 1"/><path d="m17 6-2.891-2.891"/><path d="M2 15c6.667-6 13.333 0 20-6"/><path d="m20 9 .891.891"/><path d="M3.109 14.109 4 15"/><path d="m6.5 12.5 1 1"/><path d="m7 18 2.891 2.891"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/></svg><span>Teste genético</span></a>
     <button class="mode" type="button" id="mode" aria-label="Alternar modo claro e escuro"></button>
   </div>
 </header>
