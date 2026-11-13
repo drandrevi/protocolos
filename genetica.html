@@ -1280,6 +1280,7 @@ async function makePdf(){
   btn.disabled = true; note.textContent = "Montando o PDF…";
   const clr = pdfTema === "light", fundo = clr ? [246, 250, 247] : [5, 13, 9];
   const stage = $("pdf-stage"); stage.innerHTML = pdfHtml();
+  const y0 = window.scrollY; window.scrollTo(0, 0);
   const filename = "Hormones-plano-genetico-" + (clr ? "claro-" : "") + new Date().toISOString().slice(0, 10) + ".pdf";
   try {
     if (document.fonts && document.fonts.ready) await document.fonts.ready;
@@ -1293,7 +1294,7 @@ async function makePdf(){
     el.href = url; el.download = filename; document.body.appendChild(el); el.click(); el.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000); note.textContent = "PDF gerado.";
   } catch (e) { console.error(e); note.textContent = "Não foi possível gerar o PDF. Tente novamente."; }
-  finally { btn.disabled = false; stage.innerHTML = ""; }
+  finally { btn.disabled = false; stage.innerHTML = ""; window.scrollTo(0, y0); }
 }
 
 window.__analisar = analisar;
