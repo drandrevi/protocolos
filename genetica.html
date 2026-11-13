@@ -502,7 +502,7 @@ button,input,textarea{font:inherit;color:inherit}
 
 /* PDF */
 #pdf-stage{position:fixed;left:-12000px;top:0;width:794px;pointer-events:none}
-.gp{width:794px;padding:28px 34px 20px;color:#e9f6ee;font-family:var(--f-body);font-size:11.5px;line-height:1.5;background-color:#050d09;background-image:radial-gradient(520px 380px at 92% 4%,rgba(31,174,107,.30),transparent 70%),repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.022) 58px 60px)}
+.gp{width:794px;padding:28px 34px 23px;color:#e9f6ee;font-family:var(--f-body);font-size:11.5px;line-height:1.5;background-color:#050d09;background-image:radial-gradient(520px 380px at 92% 4%,rgba(31,174,107,.30),transparent 70%),repeating-linear-gradient(90deg,transparent 0 58px,rgba(255,255,255,.022) 58px 60px)}
 .gp h1,.gp h2,.gp h3,.gp h4{font-family:var(--f-head);margin:0}
 .gp .hd{display:flex;justify-content:space-between;align-items:center}
 .gp .hd img{height:40px}
@@ -531,6 +531,18 @@ button,input,textarea{font:inherit;color:inherit}
 .gp table.cp td:last-child{white-space:nowrap;text-align:right;color:#8fe7bb;font-weight:700}
 .gp table.cp small{color:#8aa597;font-size:9.5px}
 .gp .c.al{border-color:rgba(240,185,74,.4)}
+.gp .cv{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:stretch}
+.gp .cl{display:flex;flex-direction:column}
+.gp .bz{position:relative;height:390px;border-radius:22px;display:flex;justify-content:center;align-items:center;gap:0;background-color:#06150d;background-image:radial-gradient(80% 60% at 50% 45%,rgba(31,174,107,.34),rgba(4,20,12,0) 75%);border:1px solid rgba(255,255,255,.1)}
+.gp .bz .bw{position:relative;height:360px}
+.gp .bz.two .bw{height:290px}
+.gp .bz .bw img{height:100%;width:auto;display:block}
+.gp .bz .mk2{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(62,224,143,.45),0 0 16px 6px rgba(62,224,143,.7)}
+.gp .bz .rg{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:1.5px solid rgba(143,231,187,.65)}
+.gp .bz .fc{position:absolute;left:10px;bottom:10px;padding:7px 10px;border-radius:11px;background:linear-gradient(150deg,rgba(255,255,255,.16),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.22);color:#fff}
+.gp .bz .fc span{display:block;font-family:var(--f-head);font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8fe7bb}
+.gp .bz .fc b{display:block;font-family:var(--f-head);font-size:11.5px}
+.gp.light .bz{border-color:#cfe3d7}
 .gp.light{color:#10281b;background-color:#f6faf7;background-image:radial-gradient(520px 380px at 92% 4%,rgba(31,174,107,.13),transparent 70%)}
 .gp.light .hd span,.gp.light h2,.gp.light th,.gp.light .c h3 em,.gp.light .c .meta,.gp.light table.cp td:last-child{color:#0f7a4a}
 .gp.light .lead,.gp.light .c p,.gp.light ul,.gp.light td{color:#2c4a3a}
@@ -1244,11 +1256,13 @@ function pdfHtml(){
   const r = R, data = new Date().toLocaleDateString("pt-BR"), pac = pacTxt(), clr = pdfTema === "light";
   const ac = clr ? "#13995a" : "#3ee08f";
   return `<div class="gp${clr ? " light" : ""}">
-    <div class="hd"><img src="/logo-hormones.webp" alt=""><span>Plano de tratamento · teste genético<br>${esc(data)}</span></div>
-    <h1>Plano de tratamento</h1>
-    ${pac ? `<p class="lead"><b>Paciente:</b> ${esc(pac)}</p>` : ""}
-    <p class="lead">${esc(r.sint)}</p>
-    ${r.ids.length ? `<div class="pills">${r.ids.map(id => `<span>${esc(PRED[id].nome)}</span>`).join("")}</div>` : ""}
+    <div class="cv avoid"><div class="cl">
+      <div class="hd"><img src="/logo-hormones.webp" alt=""><span>Teste genético<br>${esc(data)}</span></div>
+      <h1>Plano de tratamento</h1>
+      ${pac ? `<p class="lead"><b>Paciente:</b> ${esc(pac)}</p>` : ""}
+      <p class="lead">${esc(r.sint)}</p>
+      ${r.ids.length ? `<div class="pills">${r.ids.map(id => `<span>${esc(PRED[id].nome)}</span>`).join("")}</div>` : ""}
+    </div>${(() => { const ids = (r.plano.length ? r.plano.map(x => x.id) : r.cand.length ? [r.cand[0].id] : ["pes"]).filter(id => BODY[id] && BODY[id][0]).slice(0, 2); return `<div class="bz${ids.length > 1 ? " two" : ""}">${ids.map(id => { const b = BODY[id][0]; return `<div class="bw" style="width:${(ids.length > 1 ? 290 : 360) * b.w / b.h}px"><img src="${b.src}" alt="">${b.pts.map(([px, py]) => `<span class="rg" style="left:${px}%;top:${py}%"></span><span class="mk2" style="left:${px}%;top:${py}%"></span>`).join("")}</div>`; }).join("")}${r.plano.length ? `<div class="fc"><span>Protocolo principal</span><b>${esc(r.plano[0].nome)}</b></div>` : ""}</div>`; })()}</div>
     ${r.plano.length ? `<div class="sec"><h2>${P("route", ac)}Protocolos do plano</h2>${r.plano.map((x, i) => { const p = byId[x.id]; return `<div class="c avoid"><h3>${String(i + 1).padStart(2, "0")} · ${esc(x.nome)}<em>${esc(SIT[x.sit])}</em></h3><p class="meta">${esc(p.via)} · ${esc(p.duracao)}</p>${x.porque.length ? `<p>${esc(x.porque.join(" · "))}</p>` : ""}${x.genes.length ? `<span class="k">Genes</span><p>${esc(x.genes.join(", "))}</p>` : ""}<span class="k">Compostos e doses</span><table class="cp">${compostos(x.id).map(a => `<tr><td><b>${esc(a.n)}</b>${a.c.length ? `<br><small>${esc(a.c.join(", "))}</small>` : ""}</td><td>${esc(a.d)}</td></tr>`).join("")}</table>${x.ajustes.length ? `<span class="k">Ajuste pela genética</span><p>${esc(x.ajustes.join(" "))}</p>` : ""}${x.tecs.length ? `<span class="k">Combinar com</span><p>${esc(x.tecs.join(", "))}</p>` : ""}<span class="k">Fonte</span><p>Protocolo ${esc(x.nome)}</p></div>`; }).join("")}</div>` : ""}
     ${r.situacoes.length ? `<div class="sec"><h2>${P("target", ac)}Melhor formato para cada situação</h2><table><thead><tr><th>Situação</th><th>Genes</th><th>Melhor formato</th><th>Outras opções</th></tr></thead><tbody>${r.situacoes.map(s => `<tr class="avoid"><td><b>${esc(s.nome)}</b></td><td>${esc(s.genes.join(", "))}</td><td><b>${esc(SIT[s.best.tipo])}:</b> ${esc(s.best.nome)}</td><td>${esc(s.alts.join(", "))}</td></tr>`).join("")}</tbody></table></div>` : ""}
     ${r.proprios.length ? `<div class="sec avoid"><h2>${P("syringe", ac)}Injetáveis da clínica</h2><div class="two">${r.proprios.map(x => `<div class="c"><h3>${esc(x.nome)}<em>${esc(x.av === "neutro" ? "sem relação" : x.av)}</em></h3><p>${esc(x.txt)}</p></div>`).join("")}</div></div>` : ""}
@@ -1278,7 +1292,7 @@ async function makePdf(){
     const url = URL.createObjectURL(pdf.output("blob")), el = document.createElement("a");
     el.href = url; el.download = filename; document.body.appendChild(el); el.click(); el.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000); note.textContent = "PDF gerado.";
-  } catch (e) { note.textContent = "Não foi possível gerar o PDF. Tente novamente."; }
+  } catch (e) { console.error(e); note.textContent = "Não foi possível gerar o PDF. Tente novamente."; }
   finally { btn.disabled = false; stage.innerHTML = ""; }
 }
 
