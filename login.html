@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Entrar · Hormones Protocolos</title>
+<meta name="description" content="Protocolos clínicos da Hormones Mentoring Elite. Acesso exclusivo para mentorados.">
+<meta name="theme-color" content="#04110a">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:title" content="Hormones Protocolos">
+<meta property="og:description" content="Protocolos clínicos da Hormones Mentoring Elite, prontos para consultar e baixar em PDF.">
+<meta property="og:image" content="https://hormones-protocolos.vercel.app/og.jpg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#040b07; --glow1:rgba(31,174,107,.22); --glow2:rgba(14,107,68,.24); --stripe:rgba(255,255,255,.025);
+  --glass:linear-gradient(150deg,rgba(255,255,255,.09),rgba(255,255,255,.025)); --gline:rgba(255,255,255,.11); --ghi:rgba(255,255,255,.16);
+  --ink:#eaf6ef; --ink-2:#a3bfaf; --ink-3:#6c8a7a; --acc:#3ee08f; --field:rgba(255,255,255,.05); --err:#ff9b8f; --err-bg:rgba(255,110,90,.1);
+  --f-head:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif; --f-body:"Open Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;font-style:normal!important}
+html,body{margin:0;min-height:100%;background:var(--bg)}
+body{min-height:100vh;min-height:100dvh;color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom))}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(800px 560px at 80% -10%,var(--glow1),transparent 65%),radial-gradient(760px 640px at -10% 70%,var(--glow2),transparent 65%),repeating-linear-gradient(90deg,transparent 0 78px,var(--stripe) 78px 80px)}
+.card{width:100%;max-width:420px;background:var(--glass);border:1px solid var(--gline);border-radius:26px;box-shadow:inset 0 1px 0 var(--ghi),0 30px 60px -30px rgba(0,0,0,.9);-webkit-backdrop-filter:blur(20px) saturate(140%);backdrop-filter:blur(20px) saturate(140%);padding:34px 28px 28px}
+.logo{display:block;width:210px;max-width:70%;height:auto;margin:0 auto 22px}
+.eyebrow{font-family:var(--f-head);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);text-align:center}
+h1{font-family:var(--f-head);font-weight:700;font-size:22px;line-height:1.25;margin:6px 0 4px;text-align:center}
+.sub{margin:0 0 24px;color:var(--ink-2);font-size:14px;text-align:center}
+label{display:block;font-family:var(--f-head);font-weight:600;font-size:12.5px;color:var(--ink-2);margin:0 0 6px}
+.campo{position:relative;margin-bottom:16px}
+input{width:100%;height:48px;border-radius:14px;border:1px solid var(--gline);background:var(--field);color:var(--ink);font:500 16px var(--f-body);padding:0 14px;outline:none;transition:border-color .15s,box-shadow .15s}
+input:focus{border-color:rgba(62,224,143,.6);box-shadow:0 0 0 4px rgba(62,224,143,.12)}
+.campo.senha input{padding-right:52px}
+.ver{position:absolute;right:6px;bottom:6px;width:40px;height:36px;border:0;border-radius:10px;background:transparent;color:var(--ink-3);display:grid;place-items:center;cursor:pointer}
+.ver:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.erro{display:none;margin:0 0 14px;padding:10px 12px;border-radius:12px;background:var(--err-bg);border:1px solid rgba(255,140,120,.25);color:var(--err);font-size:13.5px}
+.erro.on{display:block}
+.btn{width:100%;height:50px;border:0;border-radius:14px;cursor:pointer;font-family:var(--f-head);font-weight:700;font-size:15px;color:#03140b;background:linear-gradient(140deg,#5ff0a6,#25c47a);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 14px 28px -14px rgba(37,196,122,.9);display:flex;align-items:center;justify-content:center;gap:10px;margin-top:6px}
+.btn:hover{filter:brightness(1.05)}
+.btn[disabled]{opacity:.65;cursor:progress}
+.rodape{margin:20px 0 0;text-align:center;color:var(--ink-3);font-size:12.5px}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<main class="card">
+  <img class="logo" src="/logo-hormones.webp" alt="Hormones Mentoring Elite" width="760" height="294">
+  <div class="eyebrow">Protocolos clínicos</div>
+  <h1>Acesso da mentoria</h1>
+  <p class="sub">Entre com o usuário e a senha que você recebeu.</p>
+  <form id="f" novalidate>
+    <p class="erro" id="erro" role="alert"></p>
+    <div class="campo">
+      <label for="usuario">Usuário</label>
+      <input id="usuario" name="usuario" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
+    </div>
+    <div class="campo senha">
+      <label for="senha">Senha</label>
+      <input id="senha" name="senha" type="password" autocomplete="current-password" required>
+      <button class="ver" type="button" id="ver" aria-label="Mostrar senha" aria-pressed="false"><svg class="ic" viewBox="0 0 24 24"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/></svg></button>
+    </div>
+    <button class="btn" type="submit" id="entrar">Entrar</button>
+  </form>
+  <p class="rodape">Acesso exclusivo Hormones Mentoring Elite</p>
+</main>
+<script>
+(() => {
+  const f = document.getElementById("f"), erro = document.getElementById("erro"), btn = document.getElementById("entrar");
+  const senha = document.getElementById("senha"), ver = document.getElementById("ver");
+  ver.addEventListener("click", () => {
+    const mostrar = senha.type === "password";
+    senha.type = mostrar ? "text" : "password";
+    ver.setAttribute("aria-pressed", String(mostrar));
+    ver.setAttribute("aria-label", mostrar ? "Esconder senha" : "Mostrar senha");
+  });
+  const aviso = (t) => { erro.textContent = t; erro.classList.toggle("on", !!t); };
+  f.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const usuario = f.usuario.value.trim(), s = senha.value;
+    if (!usuario || !s) return aviso("Preencha usuário e senha.");
+    aviso(""); btn.disabled = true; btn.textContent = "Entrando…";
+    try {
+      const r = await fetch("/api/entrar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ usuario, senha: s }) });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.erro || "Não foi possível entrar.");
+      const volta = new URLSearchParams(location.search).get("volta") || "";
+      location.replace(/^\/[^/\\]/.test(volta) ? volta : "/");
+    } catch (err) {
+      aviso(err.message || "Não foi possível entrar."); btn.disabled = false; btn.textContent = "Entrar"; senha.select();
+    }
+  });
+  document.getElementById("usuario").focus();
+})();
+</script>
+</body>
+</html>
