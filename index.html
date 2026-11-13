@@ -1067,6 +1067,7 @@ async function makePdf(p){
   if (typeof html2pdf === "undefined"){ note.textContent = "O gerador de PDF não carregou. Recarregue a página."; return; }
   btn.disabled = true; note.textContent = "Montando o PDF…";
   const stage = document.getElementById("pdf-stage"); stage.innerHTML = pdfHtml(p);
+  const y0 = window.scrollY; window.scrollTo(0, 0);
   const filename = ("Hormones-" + p.nome).normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/-+$/, "") + ".pdf";
   try {
     if (document.fonts && document.fonts.ready) await document.fonts.ready;
@@ -1099,7 +1100,7 @@ async function makePdf(p){
       setTimeout(() => URL.revokeObjectURL(url), 4000); note.textContent = "PDF gerado.";
     }
   } catch (err){ note.textContent = "Não foi possível gerar o PDF. Tente novamente."; }
-  finally { btn.disabled = false; stage.innerHTML = ""; }
+  finally { btn.disabled = false; stage.innerHTML = ""; window.scrollTo(0, y0); }
 }
 
 /* início: com #protocolo abre direto o painel; sem, começa pela triagem */
