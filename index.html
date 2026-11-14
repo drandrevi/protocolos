@@ -173,6 +173,7 @@ button,input,textarea{font:inherit;color:inherit}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.2);cursor:pointer;font-family:var(--f-head);font-weight:700;font-size:13.5px;color:#03140b;background:linear-gradient(140deg,#ffffff,#d9fbe9);box-shadow:inset 0 1px 0 #fff,0 10px 24px -12px rgba(95,240,166,.7)}
 .btn[disabled]{opacity:.6;cursor:progress}
 .note{font-size:12.5px;color:#8fe7bb;min-height:1em}
+.pdf-acoes{display:inline-flex;flex-wrap:wrap;gap:8px;margin:6px 0 0;vertical-align:middle}.pdf-acao{display:inline-flex;align-items:center;padding:8px 13px;border-radius:10px;border:1px solid rgba(62,224,143,.45);background:rgba(62,224,143,.12);color:inherit;font:inherit;font-weight:700;text-decoration:none;cursor:pointer}.pdf-dica{display:block;margin-top:6px;opacity:.85}
 .mini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:auto;padding-top:16px}
 .mini div{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
 .mini small{display:flex;align-items:center;gap:6px;font-family:var(--f-head);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#8fe7bb}
@@ -1064,7 +1065,7 @@ let downloadsP = null;
 function getDownloads(){ if (!downloadsP) downloadsP = (window.claude && typeof window.claude.use === "function") ? window.claude.use("downloads").catch(() => null) : Promise.resolve(null); return downloadsP; }
 async function makePdf(p){
   const btn = document.getElementById("pdf-btn"), note = document.getElementById("pdf-note");
-  if (typeof html2pdf === "undefined"){ note.textContent = "O gerador de PDF não carregou. Recarregue a página."; return; }
+  if (!(await garantirHtml2pdf())){ note.textContent = "O gerador de PDF não carregou. Verifique a internet e tente de novo."; return; }
   btn.disabled = true; note.textContent = "Montando o PDF…";
   const stage = document.getElementById("pdf-stage"); stage.innerHTML = pdfHtml(p);
   const y0 = window.scrollY; window.scrollTo(0, 0);
@@ -1095,9 +1096,7 @@ async function makePdf(p){
       try { await dl.save({ filename, data: blob }); note.textContent = "PDF salvo."; }
       catch (err){ const c = err && err.code; note.textContent = c === "declined" ? "Download cancelado." : c === "rate_limited" ? "Aguarde a confirmação anterior." : "Não foi possível salvar o PDF aqui."; }
     } else {
-      const url = URL.createObjectURL(blob), a = document.createElement("a");
-      a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 4000); note.textContent = "PDF gerado.";
+      entregarPdf(blob, filename, note);
     }
   } catch (err){ note.textContent = "Não foi possível gerar o PDF. Tente novamente."; }
   finally { btn.disabled = false; stage.innerHTML = ""; window.scrollTo(0, y0); }
@@ -1112,6 +1111,7 @@ getDownloads();
 })();
 </script>
 
+<script src="/pdf-entrega.js"></script>
 <script src="/conta.js" defer></script>
 </body>
 </html>
