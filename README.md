@@ -2,7 +2,9 @@
 
 Segundo cérebro médico da Hormones Mentoring Elite. O médico escolhe a demanda do paciente, vê o protocolo completo (estrutura, ativos, doses, vias e orientações) e baixa em PDF.
 
-Site estático: `index.html` traz o conteúdo, as imagens e o gerador de PDF (html2pdf.js via cdnjs). Publicado no Vercel sem etapa de build.
+Site estático: `index.html` traz o conteúdo, as imagens e o gerador de PDF (html2pdf.js via cdnjs, com cópia própria em `vendor/` se o cdnjs não carregar). Publicado no Vercel sem etapa de build.
+
+A entrega do PDF fica em `pdf-entrega.js`, usado pelo `index.html` e pelo `/genetica`. No computador e no Android o download começa sozinho. No iPhone (Safari ou app da tela inicial) e nos navegadores de dentro do WhatsApp, Instagram e Facebook aparecem os botões "Salvar ou enviar PDF" (menu de compartilhar do celular) e "Abrir PDF"; dentro de apps no Android também "Abrir no Chrome".
 
 ## Leitor de teste genético (`/genetica`)
 
